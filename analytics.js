@@ -50,7 +50,7 @@ module.exports = {
   'facebook-pixel': require('@segment/analytics.js-integration-facebook-pixel'),
   'google-analytics': require('@segment/analytics.js-integration-google-analytics'),
   'google-tag-manager': require('@segment/analytics.js-integration-google-tag-manager')
-  
+
 };
 
 },{"@segment/analytics.js-integration-amplitude":32,"@segment/analytics.js-integration-facebook-pixel":38,"@segment/analytics.js-integration-google-analytics":39,"@segment/analytics.js-integration-google-tag-manager":40}],3:[function(require,module,exports){
@@ -3559,7 +3559,7 @@ var umd = typeof window.define === 'function' && window.define.amd;
  * Source.
  */
 
-var src = '//d24n15hnbwhuhn.cloudfront.net/libs/amplitude-4.1.1-min.gz.js';
+var src = '//d24n15hnbwhuhn.cloudfront.net/libs/amplitude-4.5.2-min.gz.js';
 
 /**
  * Expose `Amplitude` integration.
@@ -3576,14 +3576,15 @@ var Amplitude = module.exports = integration('Amplitude')
   .option('batchEvents', false)
   .option('eventUploadThreshold', 30)
   .option('eventUploadPeriodMillis', 30000)
-  .option('useLogRevenueV2', false)
+  .option('useLogRevenueV2', true)
   .option('forceHttps', false)
-  .option('trackGclid', false)
+  .option('trackGclid', true)
   .option('saveParamsReferrerOncePerSession', true)
   .option('deviceIdFromUrlParam', false)
   .option('mapQueryParams', {})
   .option('trackRevenuePerProduct', false)
   .option('preferAnonymousIdForDeviceId', false)
+  .option('platform', 'Web')
   .tag('<script src="' + src + '">');
 
 /**
@@ -3609,8 +3610,11 @@ Amplitude.prototype.initialize = function() {
     forceHttps: this.options.forceHttps,
     includeGclid: this.options.trackGclid,
     saveParamsReferrerOncePerSession: this.options.saveParamsReferrerOncePerSession,
-    deviceIdFromUrlParam: this.options.deviceIdFromUrlParam
+    deviceIdFromUrlParam: this.options.deviceIdFromUrlParam,
+    platform: this.options.platform
   });
+
+  window.amplitude.setVersionName(this.options.version);
 
   var loaded = bind(this, this.loaded);
   var ready = this.ready;
@@ -4921,7 +4925,7 @@ FacebookPixel.prototype.productListViewed = function(track) {
   var contentType;
   var contentIds = [];
   var products = track.products();
-  
+
   // First, check to see if a products array with productIds has been defined.
   if (Array.isArray(products)) {
     products.forEach(function(product) {
@@ -7447,7 +7451,7 @@ module.exports = (function() {
 		store.disabled = true
 	}
 	store.enabled = !store.disabled
-	
+
 	return store
 }())
 
@@ -8458,7 +8462,7 @@ var pattern = /(\w+)\[(\d+)\]/
 
 /**
  * Safely encode the given string
- * 
+ *
  * @param {String} str
  * @return {String}
  * @api private
@@ -8474,7 +8478,7 @@ var encode = function(str) {
 
 /**
  * Safely decode the string
- * 
+ *
  * @param {String} str
  * @return {String}
  * @api private
@@ -8742,28 +8746,28 @@ function port (protocol){
       var token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZWN]|'[^']*'|'[^']*'/g;
       var timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g;
       var timezoneClip = /[^-+\dA-Z]/g;
-  
+
       // Regexes and supporting functions are cached through closure
       return function (date, mask, utc, gmt) {
-  
+
         // You can't provide utc if you skip other args (use the 'UTC:' mask prefix)
         if (arguments.length === 1 && kindOf(date) === 'string' && !/\d/.test(date)) {
           mask = date;
           date = undefined;
         }
-  
+
         date = date || new Date;
-  
+
         if(!(date instanceof Date)) {
           date = new Date(date);
         }
-  
+
         if (isNaN(date)) {
           throw TypeError('Invalid date');
         }
-  
+
         mask = String(dateFormat.masks[mask] || mask || dateFormat.masks['default']);
-  
+
         // Allow setting the utc/gmt argument via the mask
         var maskSlice = mask.slice(0, 4);
         if (maskSlice === 'UTC:' || maskSlice === 'GMT:') {
@@ -8773,7 +8777,7 @@ function port (protocol){
             gmt = true;
           }
         }
-  
+
         var _ = utc ? 'getUTC' : 'get';
         var d = date[_ + 'Date']();
         var D = date[_ + 'Day']();
@@ -8817,7 +8821,7 @@ function port (protocol){
           W:    W,
           N:    N
         };
-  
+
         return mask.replace(token, function (match) {
           if (match in flags) {
             return flags[match];
@@ -8897,7 +8901,7 @@ function getWeek(date) {
 /**
  * Get ISO-8601 numeric representation of the day of the week
  * 1 (for Monday) through 7 (for Sunday)
- * 
+ *
  * @param  {Object} `date`
  * @return {Number}
  */
