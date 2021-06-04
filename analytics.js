@@ -35,7 +35,7 @@ Object.keys(Integrations).forEach(function(name) {
   analytics.use(Integrations[name]);
 });
 
-},{"../package.json":109,"./integrations":2,"@segment/analytics.js-core":21}],2:[function(require,module,exports){
+},{"../package.json":132,"./integrations":2,"@segment/analytics.js-core":24}],2:[function(require,module,exports){
 /* eslint quote-props: 0 */
 'use strict';
 
@@ -47,13 +47,42 @@ Object.keys(Integrations).forEach(function(name) {
 module.exports = {
 
   'amplitude': require('@segment/analytics.js-integration-amplitude'),
-  'facebook-pixel': require('@segment/analytics.js-integration-facebook-pixel'),
-  'google-analytics': require('@segment/analytics.js-integration-google-analytics'),
-  'google-tag-manager': require('@segment/analytics.js-integration-google-tag-manager')
+  //'google-analytics': require('@segment/analytics.js-integration-google-analytics'),
+  'google-adwords-new': require('@segment/analytics.js-integration-google-adwords-new'),
+  //'datagran': require('@foodylatam/analytics.js-integration-datagran-legacy'),
+  'segmentio': require('@segment/analytics.js-integration-segmentio'),
 
+  'customerio': require('@segment/analytics.js-integration-customerio')
 };
 
-},{"@segment/analytics.js-integration-amplitude":32,"@segment/analytics.js-integration-facebook-pixel":38,"@segment/analytics.js-integration-google-analytics":39,"@segment/analytics.js-integration-google-tag-manager":40}],3:[function(require,module,exports){
+},{"@segment/analytics.js-integration-amplitude":35,"@segment/analytics.js-integration-customerio":41,"@segment/analytics.js-integration-google-adwords-new":46,"@segment/analytics.js-integration-segmentio":47}],3:[function(require,module,exports){
+var IDX=256, HEX=[], BUFFER;
+while (IDX--) HEX[IDX] = (IDX + 256).toString(16).substring(1);
+
+function v4() {
+	var i=0, num, out='';
+
+	if (!BUFFER || ((IDX + 16) > 256)) {
+		BUFFER = Array(i=256);
+		while (i--) BUFFER[i] = 256 * Math.random() | 0;
+		i = IDX = 0;
+	}
+
+	for (; i < 16; i++) {
+		num = BUFFER[IDX + i];
+		if (i==6) out += HEX[num & 15 | 64];
+		else if (i==8) out += HEX[num & 63 | 128];
+		else out += HEX[num];
+
+		if (i & 1 && i > 1 && i < 11) out += '-';
+	}
+
+	IDX++;
+	return out;
+}
+
+exports.v4 = v4;
+},{}],4:[function(require,module,exports){
 'use strict';
 
 /*
@@ -128,7 +157,7 @@ var after = function after(n, fn) {
 
 module.exports = after;
 
-},{"@ndhoule/arity":4}],4:[function(require,module,exports){
+},{"@ndhoule/arity":5}],5:[function(require,module,exports){
 'use strict';
 
 var objToString = Object.prototype.toString;
@@ -286,7 +315,7 @@ var arity = function arity(n, func) {
 
 module.exports = arity;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 /*
@@ -345,7 +374,7 @@ var clone = function clone(obj) {
 
 module.exports = clone;
 
-},{"component-type":66}],6:[function(require,module,exports){
+},{"component-type":88}],7:[function(require,module,exports){
 'use strict';
 
 /*
@@ -497,7 +526,7 @@ var defaults = function(target /*, ...sources */) {
 module.exports = defaults;
 module.exports.deep = defaultsDeep;
 
-},{"@ndhoule/drop":7,"@ndhoule/rest":16}],7:[function(require,module,exports){
+},{"@ndhoule/drop":8,"@ndhoule/rest":17}],8:[function(require,module,exports){
 'use strict';
 
 var max = Math.max;
@@ -544,7 +573,7 @@ var drop = function drop(count, collection) {
 
 module.exports = drop;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 /*
@@ -675,7 +704,7 @@ var each = function each(iterator, collection) {
 
 module.exports = each;
 
-},{"@ndhoule/keys":13}],9:[function(require,module,exports){
+},{"@ndhoule/keys":14}],10:[function(require,module,exports){
 'use strict';
 
 /*
@@ -725,7 +754,7 @@ var every = function every(predicate, collection) {
 
 module.exports = every;
 
-},{"@ndhoule/each":8}],10:[function(require,module,exports){
+},{"@ndhoule/each":9}],11:[function(require,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty;
@@ -770,7 +799,7 @@ var extend = function extend(dest /*, sources */) {
 
 module.exports = extend;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 /*
@@ -826,7 +855,7 @@ var foldl = function foldl(iterator, accumulator, collection) {
 
 module.exports = foldl;
 
-},{"@ndhoule/each":8}],12:[function(require,module,exports){
+},{"@ndhoule/each":9}],13:[function(require,module,exports){
 'use strict';
 
 /*
@@ -910,7 +939,7 @@ var includes = function includes(searchElement, collection) {
 
 module.exports = includes;
 
-},{"@ndhoule/each":8}],13:[function(require,module,exports){
+},{"@ndhoule/each":9}],14:[function(require,module,exports){
 'use strict';
 
 var hop = Object.prototype.hasOwnProperty;
@@ -1077,7 +1106,7 @@ var keys = function keys(source) {
 
 module.exports = keys;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 /*
@@ -1122,7 +1151,7 @@ var map = function map(iterator, collection) {
 
 module.exports = map;
 
-},{"@ndhoule/each":8}],15:[function(require,module,exports){
+},{"@ndhoule/each":9}],16:[function(require,module,exports){
 'use strict';
 
 var objToString = Object.prototype.toString;
@@ -1194,7 +1223,7 @@ var pick = function pick(props, object) {
 
 module.exports = pick;
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 var max = Math.max;
@@ -1234,7 +1263,113 @@ var rest = function rest(collection) {
 
 module.exports = rest;
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
+'use strict';
+
+/*
+ * Module dependencies.
+ */
+
+var parse = require('component-querystring').parse;
+
+/**
+ * All the ad query params we look for.
+ */
+var QUERYIDS = {
+  btid: 'dataxu',
+  urid: 'millennial-media'
+};
+
+/**
+ * Get all ads info from the given `querystring`
+ *
+ * @param {string} query
+ * @return {Object}
+ */
+function ads(query) {
+  var params = parse(query);
+  for (var key in params) {
+    if (params.hasOwnProperty(key)) {
+      for (var id in QUERYIDS) {
+        if (QUERYIDS.hasOwnProperty(id)) {
+          if (key === id) {
+            return {
+              id : params[key],
+              type : QUERYIDS[id]
+            };
+          }
+        }
+      }
+    }
+  }
+}
+
+/*
+ * Exports.
+ */
+
+module.exports = ads;
+
+},{"component-querystring":86}],19:[function(require,module,exports){
+
+var type = require('component-type');
+var clone = require('component-clone');
+
+
+/**
+ * Expose `alias`.
+ */
+
+module.exports = alias;
+
+
+/**
+ * Alias an `object`.
+ *
+ * @param {Object} obj
+ * @param {Mixed} method
+ */
+
+function alias (obj, method) {
+  switch (type(method)) {
+    case 'object': return aliasByDictionary(clone(obj), method);
+    case 'function': return aliasByFunction(clone(obj), method);
+  }
+}
+
+
+/**
+ * Convert the keys in an `obj` using a dictionary of `aliases`.
+ *
+ * @param {Object} obj
+ * @param {Object} aliases
+ */
+
+function aliasByDictionary (obj, aliases) {
+  for (var key in aliases) {
+    if (undefined === obj[key]) continue;
+    obj[aliases[key]] = obj[key];
+    delete obj[key];
+  }
+  return obj;
+}
+
+
+/**
+ * Convert the keys in an `obj` using a `convert` function.
+ *
+ * @param {Object} obj
+ * @param {Function} convert
+ */
+
+function aliasByFunction (obj, convert) {
+  // have to create another object so that ie8 won't infinite loop on keys
+  var output = {};
+  for (var key in obj) output[convert(key)] = obj[key];
+  return output;
+}
+
+},{"component-clone":79,"component-type":88}],20:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1933,7 +2068,7 @@ module.exports.memory = memory;
 module.exports.store = store;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./cookie":18,"./group":20,"./memory":22,"./normalize":23,"./pageDefaults":24,"./store":25,"./user":26,"@ndhoule/after":3,"@ndhoule/clone":5,"@ndhoule/defaults":6,"@ndhoule/each":8,"@ndhoule/foldl":11,"@ndhoule/keys":13,"@ndhoule/pick":15,"@segment/is-meta":48,"@segment/prevent-default":52,"bind-all":56,"component-emitter":27,"component-event":62,"component-querystring":64,"component-type":66,"debug":28,"is":77,"next-tick":84,"segmentio-facade":95}],18:[function(require,module,exports){
+},{"./cookie":21,"./group":23,"./memory":25,"./normalize":26,"./pageDefaults":27,"./store":28,"./user":29,"@ndhoule/after":4,"@ndhoule/clone":6,"@ndhoule/defaults":7,"@ndhoule/each":9,"@ndhoule/foldl":12,"@ndhoule/keys":14,"@ndhoule/pick":16,"@segment/is-meta":61,"@segment/prevent-default":70,"bind-all":77,"component-emitter":30,"component-event":84,"component-querystring":86,"component-type":88,"debug":31,"is":98,"next-tick":106,"segmentio-facade":116}],21:[function(require,module,exports){
 'use strict';
 
 /**
@@ -2067,7 +2202,7 @@ module.exports = bindAll(new Cookie());
 
 module.exports.Cookie = Cookie;
 
-},{"@ndhoule/clone":5,"@ndhoule/defaults":6,"@segment/top-domain":54,"bind-all":56,"component-cookie":58,"debug":28,"json3":78}],19:[function(require,module,exports){
+},{"@ndhoule/clone":6,"@ndhoule/defaults":7,"@segment/top-domain":74,"bind-all":77,"component-cookie":80,"debug":31,"json3":99}],22:[function(require,module,exports){
 'use strict';
 
 /*
@@ -2310,7 +2445,7 @@ Entity.prototype.load = function() {
 };
 
 
-},{"./cookie":18,"./memory":22,"./store":25,"@ndhoule/clone":5,"@ndhoule/defaults":6,"@ndhoule/extend":10,"@segment/isodate-traverse":49,"debug":28}],20:[function(require,module,exports){
+},{"./cookie":21,"./memory":25,"./store":28,"@ndhoule/clone":6,"@ndhoule/defaults":7,"@ndhoule/extend":11,"@segment/isodate-traverse":62,"debug":31}],23:[function(require,module,exports){
 'use strict';
 
 /*
@@ -2370,7 +2505,7 @@ module.exports = bindAll(new Group());
 
 module.exports.Group = Group;
 
-},{"./entity":19,"bind-all":56,"debug":28,"inherits":75}],21:[function(require,module,exports){
+},{"./entity":22,"bind-all":77,"debug":31,"inherits":96}],24:[function(require,module,exports){
 'use strict';
 
 /**
@@ -2397,7 +2532,7 @@ analytics.VERSION = require('../package.json').version;
 
 module.exports = analytics;
 
-},{"../package.json":31,"./analytics":17}],22:[function(require,module,exports){
+},{"../package.json":34,"./analytics":20}],25:[function(require,module,exports){
 'use strict';
 
 /*
@@ -2463,7 +2598,7 @@ Memory.prototype.remove = function(key) {
   return true;
 };
 
-},{"@ndhoule/clone":5,"bind-all":56}],23:[function(require,module,exports){
+},{"@ndhoule/clone":6,"bind-all":77}],26:[function(require,module,exports){
 'use strict';
 
 /**
@@ -2556,7 +2691,7 @@ function normalize(msg, list) {
   }
 }
 
-},{"@ndhoule/defaults":6,"@ndhoule/each":8,"@ndhoule/includes":12,"@ndhoule/map":14,"component-type":66,"debug":28}],24:[function(require,module,exports){
+},{"@ndhoule/defaults":7,"@ndhoule/each":9,"@ndhoule/includes":13,"@ndhoule/map":15,"component-type":88,"debug":31}],27:[function(require,module,exports){
 'use strict';
 
 /*
@@ -2620,7 +2755,7 @@ function canonicalUrl(search) {
 
 module.exports = pageDefaults;
 
-},{"@ndhoule/includes":12,"@segment/canonical":46,"component-url":67}],25:[function(require,module,exports){
+},{"@ndhoule/includes":13,"@segment/canonical":58,"component-url":89}],28:[function(require,module,exports){
 'use strict';
 
 /*
@@ -2710,7 +2845,7 @@ module.exports = bindAll(new Store());
 
 module.exports.Store = Store;
 
-},{"@ndhoule/defaults":6,"@segment/store":53,"bind-all":56}],26:[function(require,module,exports){
+},{"@ndhoule/defaults":7,"@segment/store":73,"bind-all":77}],29:[function(require,module,exports){
 'use strict';
 
 /*
@@ -2888,7 +3023,7 @@ module.exports = bindAll(new User());
 
 module.exports.User = User;
 
-},{"./cookie":18,"./entity":19,"bind-all":56,"component-cookie":58,"debug":28,"inherits":75,"uuid":30}],27:[function(require,module,exports){
+},{"./cookie":21,"./entity":22,"bind-all":77,"component-cookie":80,"debug":31,"inherits":96,"uuid":33}],30:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -3053,7 +3188,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],28:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 
 /**
  * Expose `debug()` as the module.
@@ -3192,7 +3327,7 @@ try {
   if (window.localStorage) debug.enable(localStorage.debug);
 } catch(e){}
 
-},{}],29:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 (function (global){
 
 var rng;
@@ -3228,7 +3363,7 @@ module.exports = rng;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 //     uuid.js
 //
 //     Copyright (c) 2010-2012 Robert Kieffer
@@ -3413,7 +3548,7 @@ uuid.unparse = unparse;
 
 module.exports = uuid;
 
-},{"./rng":29}],31:[function(require,module,exports){
+},{"./rng":32}],34:[function(require,module,exports){
 module.exports={
   "_args": [
     [
@@ -3534,7 +3669,7 @@ module.exports={
   "version": "3.0.0"
 }
 
-},{}],32:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 'use strict';
 
 /**
@@ -3559,7 +3694,7 @@ var umd = typeof window.define === 'function' && window.define.amd;
  * Source.
  */
 
-var src = '//d24n15hnbwhuhn.cloudfront.net/libs/amplitude-4.5.2-min.gz.js';
+var src = '//d24n15hnbwhuhn.cloudfront.net/libs/amplitude-4.1.1-min.gz.js';
 
 /**
  * Expose `Amplitude` integration.
@@ -3576,15 +3711,14 @@ var Amplitude = module.exports = integration('Amplitude')
   .option('batchEvents', false)
   .option('eventUploadThreshold', 30)
   .option('eventUploadPeriodMillis', 30000)
-  .option('useLogRevenueV2', true)
+  .option('useLogRevenueV2', false)
   .option('forceHttps', false)
-  .option('trackGclid', true)
+  .option('trackGclid', false)
   .option('saveParamsReferrerOncePerSession', true)
   .option('deviceIdFromUrlParam', false)
   .option('mapQueryParams', {})
   .option('trackRevenuePerProduct', false)
   .option('preferAnonymousIdForDeviceId', false)
-  .option('platform', 'Web')
   .tag('<script src="' + src + '">');
 
 /**
@@ -3610,11 +3744,8 @@ Amplitude.prototype.initialize = function() {
     forceHttps: this.options.forceHttps,
     includeGclid: this.options.trackGclid,
     saveParamsReferrerOncePerSession: this.options.saveParamsReferrerOncePerSession,
-    deviceIdFromUrlParam: this.options.deviceIdFromUrlParam,
-    platform: this.options.platform
+    deviceIdFromUrlParam: this.options.deviceIdFromUrlParam
   });
-
-  window.amplitude.setVersionName(this.options.version);
 
   var loaded = bind(this, this.loaded);
   var ready = this.ready;
@@ -3908,7 +4039,7 @@ function mapRevenueAttributes(track) {
   };
 }
 
-},{"@ndhoule/each":8,"@segment/analytics.js-integration":33,"@segment/top-domain":54,"component-bind":57,"do-when":71,"is":77,"segmentio-facade":95}],33:[function(require,module,exports){
+},{"@ndhoule/each":9,"@segment/analytics.js-integration":36,"@segment/top-domain":74,"component-bind":78,"do-when":92,"is":98,"segmentio-facade":116}],36:[function(require,module,exports){
 'use strict';
 
 /**
@@ -3973,7 +4104,7 @@ function createIntegration(name) {
 
 module.exports = createIntegration;
 
-},{"./protos":34,"./statics":35,"@ndhoule/clone":5,"@ndhoule/defaults":6,"@ndhoule/extend":10,"component-bind":57,"debug":69,"slug-component":101}],34:[function(require,module,exports){
+},{"./protos":37,"./statics":38,"@ndhoule/clone":6,"@ndhoule/defaults":7,"@ndhoule/extend":11,"component-bind":78,"debug":90,"slug-component":122}],37:[function(require,module,exports){
 'use strict';
 
 /**
@@ -4449,7 +4580,7 @@ function render(template, locals) {
   }, {}, template.attrs);
 }
 
-},{"@ndhoule/after":3,"@ndhoule/each":8,"@ndhoule/every":9,"@ndhoule/foldl":11,"@segment/fmt":47,"@segment/load-script":51,"analytics-events":36,"component-emitter":61,"is":77,"load-iframe":79,"next-tick":84,"to-no-case":37}],35:[function(require,module,exports){
+},{"@ndhoule/after":4,"@ndhoule/each":9,"@ndhoule/every":10,"@ndhoule/foldl":12,"@segment/fmt":60,"@segment/load-script":64,"analytics-events":39,"component-emitter":83,"is":98,"load-iframe":101,"next-tick":106,"to-no-case":40}],38:[function(require,module,exports){
 'use strict';
 
 /**
@@ -4614,7 +4745,7 @@ function objectify(str) {
   };
 }
 
-},{"@ndhoule/each":8,"@ndhoule/includes":12,"component-emitter":61,"domify":72}],36:[function(require,module,exports){
+},{"@ndhoule/each":9,"@ndhoule/includes":13,"component-emitter":83,"domify":93}],39:[function(require,module,exports){
 
 module.exports = {
   // Promotions
@@ -4681,7 +4812,7 @@ module.exports = {
   pushNotificationBounced: /^[ _]?push[ _]?notification[ _]?bounced[ _]?$/i
 };
 
-},{}],37:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 
 /**
  * Expose `toNoCase`.
@@ -4753,1495 +4884,41 @@ function uncamelize (string) {
     return previous + ' ' + uppers.toLowerCase().split('').join(' ');
   });
 }
-},{}],38:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 'use strict';
 
 /**
  * Module dependencies.
  */
 
+var Identify = require('segmentio-facade').Identify;
+var alias = require('@segment/alias');
+var convertDates = require('@segment/convert-dates');
 var integration = require('@segment/analytics.js-integration');
-var foldl = require('@ndhoule/foldl');
-var each = require('@ndhoule/each');
-var reject = require('reject');
-var camel = require('to-camel-case');
-var is = require('is');
-var dateformat = require('dateformat');
-var Track = require('segmentio-facade').Track;
 
 /**
- * Expose `Facebook Pixel`.
+ * Expose `Customerio` integration.
  */
 
-var FacebookPixel = module.exports = integration('Facebook Pixel')
-  .global('fbq')
-  .option('pixelId', '')
-  .option('agent', 'seg')
-  .option('valueIdentifier', 'value')
-  .option('initWithExistingTraits', false)
-  .option('traverse', false)
-  .mapping('standardEvents')
-  .mapping('legacyEvents')
-  .tag('<script src="//connect.facebook.net/en_US/fbevents.js">');
+var Customerio = module.exports = integration('Customer.io')
+  .global('_cio')
+  .option('siteId', '')
+  .tag('<script id="cio-tracker" src="https://assets.customer.io/assets/track.js" data-site-id="{{ siteId }}">');
 
 /**
- * Initialize Facebook Pixel.
+ * Initialize.
  *
- * @param {Facade} page
+ * http://customer.io/docs/api/javascript.html
+ *
+ * @api public
  */
 
-FacebookPixel.prototype.initialize = function() {
-  window._fbq = function() {
-    if (window.fbq.callMethod) {
-      window.fbq.callMethod.apply(window.fbq, arguments);
-    } else {
-      window.fbq.queue.push(arguments);
-    }
-  };
-
-  window.fbq = window.fbq || window._fbq;
-  window.fbq.push = window.fbq;
-  window.fbq.loaded = true;
-  window.fbq.disablePushState = true; // disables automatic pageview tracking
-  window.fbq.allowDuplicatePageViews = true; // enables fb
-  window.fbq.agent = this.options.agent;
-  window.fbq.version = '2.0';
-  window.fbq.queue = [];
+Customerio.prototype.initialize = function() {
+  window._cio = window._cio || [];
+  /* eslint-disable */
+  (function(){var a,b,c; a = function(f){return function(){window._cio.push([f].concat(Array.prototype.slice.call(arguments,0))); }; }; b = ['identify', 'track']; for (c = 0; c < b.length; c++) {window._cio[b[c]] = a(b[c]); } })();
+  /* eslint-enable */
   this.load(this.ready);
-  if (this.options.initWithExistingTraits) {
-    var traits = formatTraits(this.analytics);
-    window.fbq('init', this.options.pixelId, traits);
-  } else {
-    window.fbq('init', this.options.pixelId);
-  }
-};
-
-/**
- * Has the Facebook Pixel library been loaded yet?
- *
- * @return {Boolean}
- */
-
-FacebookPixel.prototype.loaded = function() {
-  return !!(window.fbq && window.fbq.callMethod);
-};
-
-/**
- * Trigger a page view.
- *
- * @param {Facade} identify
- */
-
-FacebookPixel.prototype.page = function() {
-  window.fbq('track', 'PageView');
-};
-
-/**
- * Track an event.
- *
- * @param {Facade} track
- */
-
-FacebookPixel.prototype.track = function(track) {
-  var event = track.event();
-  var revenue = formatRevenue(track.revenue());
-  var payload = foldl(function(acc, val, key) {
-    if (key === 'revenue') {
-      acc.value = revenue;
-      return acc;
-    }
-
-    /**
-    * FB requires these date fields be formatted in a specific way.
-    * The specifications are non iso8601 compliant.
-    * https://developers.facebook.com/docs/marketing-api/dynamic-ads-for-travel/audience
-    * Therefore, we check if the property is one of these reserved fields.
-    * If so, we check if we have converted it to an iso date object already.
-    * If we have, we convert it again into Facebook's spec.
-    * If we have not, the user has likely passed in a date string that already
-    * adheres to FB's docs so we can just pass it through as is.
-    * @ccnixon
-    */
-
-    var dateFields = [
-      'checkinDate',
-      'checkoutDate',
-      'departingArrivalDate',
-      'departingDepartureDate',
-      'returningArrivalDate',
-      'returningDepartureDate',
-      'travelEnd',
-      'travelStart'
-    ];
-
-    if (dateFields.indexOf(camel(key)) >= 0) {
-      if (is.date(val)) {
-        val = val.toISOString().split('T')[0];
-        acc[key] = val;
-        return acc;
-      }
-    }
-
-    acc[key] = val;
-    return acc;
-  }, {}, track.properties());
-
-  var standard = this.standardEvents(event);
-  var legacy = this.legacyEvents(event);
-
-  // non-mapped events get sent as "custom events" with full
-  // tranformed payload
-  if (![].concat(standard, legacy).length) {
-    window.fbq('trackCustom', event, payload);
-    return;
-  }
-
-  // standard conversion events, mapped to one of 9 standard events
-  // "Purchase" requires a currency parameter;
-  // send full transformed payload
-  each(function(event) {
-    if (event === 'Purchase') payload.currency = track.currency(); // defaults to 'USD'
-    window.fbq('track', event, payload);
-  }, standard);
-
-  // legacy conversion events — mapped to specific "pixelId"s
-  // send only currency and value
-  each(function(event) {
-    window.fbq('track', event, {
-      currency: track.currency(),
-      value: revenue
-    });
-  }, legacy);
-};
-
-/**
- * Product List Viewed.
- *
- * @api private
- * @param {Track} track category
- */
-
-FacebookPixel.prototype.productListViewed = function(track) {
-  var contentType;
-  var contentIds = [];
-  var products = track.products();
-
-  // First, check to see if a products array with productIds has been defined.
-  if (Array.isArray(products)) {
-    products.forEach(function(product) {
-      var productId = product.productId || product.product_id;
-      if (productId) {
-        contentIds.push(productId);
-      }
-    });
-  }
-
-  // If no products have been defined, fallback on legacy behavior.
-  // Facebook documents the content_type parameter decision here: https://developers.facebook.com/docs/facebook-pixel/api-reference
-  if (contentIds.length) {
-    contentType = 'product';
-  } else {
-    contentIds.push(track.category() || '');
-    contentType = 'product_group';
-  }
-
-  window.fbq('track', 'ViewContent', {
-    content_ids: contentIds,
-    content_type: contentType
-  });
-
-  // fall through for mapped legacy conversions
-  each(function(event) {
-    window.fbq('track', event, {
-      currency: track.currency(),
-      value: formatRevenue(track.revenue())
-    });
-  }, this.legacyEvents(track.event()));
-};
-
-/**
- * Product viewed.
- *
- * @api private
- * @param {Track} track
- */
-
-FacebookPixel.prototype.productViewed = function(track) {
-  window.fbq('track', 'ViewContent', {
-    content_ids: [track.productId() || track.id() || track.sku() || ''],
-    content_type: 'product',
-    content_name: track.name() || '',
-    content_category: track.category() || '',
-    currency: track.currency(),
-    value: this.options.valueIdentifier === 'value' ? formatRevenue(track.value()) : formatRevenue(track.price())
-  });
-
-  // fall through for mapped legacy conversions
-  each(function(event) {
-    window.fbq('track', event, {
-      currency: track.currency(),
-      value: formatRevenue(track.revenue())
-    });
-  }, this.legacyEvents(track.event()));
-};
-
-/**
- * Product added.
- *
- * @api private
- * @param {Track} track
- */
-
-FacebookPixel.prototype.productAdded = function(track) {
-  window.fbq('track', 'AddToCart', {
-    content_ids: [track.productId() || track.id() || track.sku() || ''],
-    content_type: 'product',
-    content_name: track.name() || '',
-    content_category: track.category() || '',
-    currency: track.currency(),
-    value: this.options.valueIdentifier === 'value' ? formatRevenue(track.value()) : formatRevenue(track.price())
-  });
-
-  // fall through for mapped legacy conversions
-  each(function(event) {
-    window.fbq('track', event, {
-      currency: track.currency(),
-      value: formatRevenue(track.revenue())
-    });
-  }, this.legacyEvents(track.event()));
-};
-
-/**
- * Order Completed.
- *
- * @api private
- * @param {Track} track
- */
-
-FacebookPixel.prototype.orderCompleted = function(track) {
-  var content_ids = foldl(function(acc, product) {
-    var item = new Track({ properties: product });
-    var key = item.productId() || item.id() || item.sku();
-    if (key) acc.push(key);
-    return acc;
-  }, [], track.products() || []);
-
-  var revenue = formatRevenue(track.revenue());
-
-  window.fbq('track', 'Purchase', {
-    content_ids: content_ids,
-    content_type: 'product',
-    currency: track.currency(),
-    value: revenue
-  });
-
-  // fall through for mapped legacy conversions
-  each(function(event) {
-    window.fbq('track', event, {
-      currency: track.currency(),
-      value: formatRevenue(track.revenue())
-    });
-  }, this.legacyEvents(track.event()));
-};
-
-
-/**
- * Get Revenue Formatted Correctly for FB.
- *
- * @api private
- * @param {Track} track
- */
-
-function formatRevenue(revenue) {
-  return Number(revenue || 0).toFixed(2);
-}
-
-/**
- * Get Traits Formatted Correctly for FB.
- *
- * https://developers.facebook.com/docs/facebook-pixel/pixel-with-ads/conversion-tracking#advanced_match
- *
- * @api private
- */
-
-function formatTraits(analytics) {
-  var traits = analytics && analytics.user().traits();
-  if (!traits) return {};
-  var firstName;
-  var lastName;
-  // Check for firstName property
-  // else check for name
-  if (traits.firstName) {
-    firstName = traits.firstName;
-    lastName = traits.lastName;
-  } else {
-    var nameArray = traits.name && traits.name.toLowerCase().split(' ') || [];
-    firstName = nameArray.shift();
-    lastName = nameArray.pop();
-  }
-  var gender;
-  if (traits.gender && is.string(traits.gender)) {
-    gender = traits.gender.slice(0,1).toLowerCase();
-  }
-  var birthday = traits.birthday && dateformat(traits.birthday, 'yyyymmdd');
-  var address = traits.address || {};
-  var city = address.city && address.city.split(' ').join('').toLowerCase();
-  var state = address.state && address.state.toLowerCase();
-  var postalCode = address.postalCode;
-  return reject({
-    em: traits.email,
-    fn: firstName,
-    ln: lastName,
-    ph: traits.phone,
-    ge: gender,
-    db: birthday,
-    ct: city,
-    st: state,
-    zp: postalCode
-  });
-}
-
-},{"@ndhoule/each":8,"@ndhoule/foldl":11,"@segment/analytics.js-integration":41,"dateformat":68,"is":77,"reject":88,"segmentio-facade":95,"to-camel-case":102}],39:[function(require,module,exports){
-'use strict';
-
-/**
- * Module dependencies.
- */
-
-var Track = require('segmentio-facade').Track;
-var defaults = require('@ndhoule/defaults');
-var dot = require('obj-case');
-var each = require('component-each');
-var integration = require('@segment/analytics.js-integration');
-var is = require('is');
-var len = require('object-component').length;
-var push = require('global-queue')('_gaq');
-var reject = require('reject');
-var useHttps = require('use-https');
-var extend = require('extend');
-var user;
-
-/**
- * Expose plugin.
- */
-
-module.exports = exports = function(analytics) {
-  // eslint-disable-next-line no-use-before-define
-  analytics.addIntegration(GA);
-  user = analytics.user();
-};
-
-/**
- * Expose `GA` integration.
- *
- * http://support.google.com/analytics/bin/answer.py?hl=en&answer=2558867
- * https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApiBasicConfiguration#_gat.GA_Tracker_._setSiteSpeedSampleRate
- */
-
-var GA = exports.Integration = integration('Google Analytics')
-  .readyOnLoad()
-  .global('ga')
-  .global('gaplugins')
-  .global('_gaq')
-  .global('GoogleAnalyticsObject')
-  .option('anonymizeIp', false)
-  .option('useGoogleAmpClientId', false)
-  .option('classic', false)
-  .option('contentGroupings', {})
-  .option('dimensions', {})
-  .option('domain', 'auto')
-  .option('doubleClick', false)
-  .option('enhancedEcommerce', false)
-  .option('enhancedLinkAttribution', false)
-  .option('ignoredReferrers', null)
-  .option('includeSearch', false)
-  .option('setAllMappedProps', true)
-  .option('metrics', {})
-  .option('nonInteraction', false)
-  .option('sendUserId', false)
-  .option('siteSpeedSampleRate', 1)
-  .option('sampleRate', 100)
-  .option('trackCategorizedPages', true)
-  .option('trackNamedPages', true)
-  .option('trackingId', '')
-  .option('optimize', '')
-  .option('nameTracker', false)
-  .tag('library', '<script src="//www.google-analytics.com/analytics.js">')
-  .tag('double click', '<script src="//stats.g.doubleclick.net/dc.js">')
-  .tag('http', '<script src="http://www.google-analytics.com/ga.js">')
-  .tag('https', '<script src="https://ssl.google-analytics.com/ga.js">');
-
-/**
- * On `construct` swap any config-based methods to the proper implementation.
- */
-
-GA.on('construct', function(integration) {
-  if (integration.options.classic) {
-    integration.initialize = integration.initializeClassic;
-    integration.loaded = integration.loadedClassic;
-    integration.page = integration.pageClassic;
-    integration.track = integration.trackClassic;
-    integration.orderCompleted = integration.completedOrderClassic;
-  } else if (integration.options.enhancedEcommerce) {
-    integration.productViewed = integration.productViewedEnhanced;
-    integration.productClicked = integration.productClickedEnhanced;
-    integration.productAdded = integration.productAddedEnhanced;
-    integration.productRemoved = integration.productRemovedEnhanced;
-    integration.checkoutStarted = integration.checkoutStartedEnhanced;
-    integration.checkoutStepViewed = integration.checkoutStepViewedEnhanced;
-    integration.checkoutStepCompleted = integration.checkoutStepCompletedEnhanced;
-    integration.orderUpdated = integration.orderUpdatedEnhanced;
-    integration.orderCompleted = integration.orderCompletedEnhanced;
-    integration.orderRefunded = integration.orderRefundedEnhanced;
-    integration.promotionViewed = integration.promotionViewedEnhanced;
-    integration.promotionClicked = integration.promotionClickedEnhanced;
-    integration.productListViewed = integration.productListViewedEnhanced;
-    integration.productListFiltered = integration.productListFilteredEnhanced;
-  }
-});
-
-/**
- * Initialize.
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/advanced
- */
-
-GA.prototype.initialize = function() {
-  this.pageCalled = false;
-  var opts = this.options;
-
-  // setup the tracker globals
-  window.GoogleAnalyticsObject = 'ga';
-  window.ga = window.ga || function() {
-    window.ga.q = window.ga.q || [];
-    window.ga.q.push(arguments);
-  };
-  window.ga.l = new Date().getTime();
-
-  if (window.location.hostname === 'localhost') opts.domain = 'none';
-  var config = {
-    // Fall back on default to protect against empty string
-    cookieDomain: opts.domain || GA.prototype.defaults.domain,
-    siteSpeedSampleRate: opts.siteSpeedSampleRate,
-    sampleRate: opts.sampleRate,
-    allowLinker: true,
-    useAmpClientId: opts.useGoogleAmpClientId
-  };
-
-  // set tracker name to avoid collisions with unnamed third party trackers
-  if (opts.nameTracker) {
-    config.name = 'segmentGATracker';
-    this._trackerName = 'segmentGATracker.';  // tracker name must be prepended to all ga method calls with format [name].[method]
-  } else {
-    this._trackerName = ''; // tracker name must be set even if empty to avoid undefined references when prepending
-  }
-  window.ga('create', opts.trackingId, config);
-
-  if (opts.optimize) window.ga(this._trackerName + 'require', opts.optimize);
-
-  // display advertising
-  if (opts.doubleClick) {
-    window.ga(this._trackerName + 'require', 'displayfeatures');
-  }
-
-  // https://support.google.com/analytics/answer/2558867?hl=en
-  if (opts.enhancedLinkAttribution) {
-    window.ga(this._trackerName + 'require', 'linkid', 'linkid.js');
-  }
-
-  // send global id
-  if (opts.sendUserId && user.id()) {
-    window.ga(this._trackerName + 'set', 'userId', user.id());
-  }
-
-  // anonymize after initializing, otherwise a warning is shown
-  // in google analytics debugger
-  if (opts.anonymizeIp) window.ga(this._trackerName + 'set', 'anonymizeIp', true);
-
-  // initialize page with `id` appended to user's traits
-  // sets `id` as a custom dimension for the lifetime of the tracker object and
-  // ensures `id` sent as a custom dimension for all hits on the page
-  var userTraits = user.traits();
-  if (user.id()) {
-    userTraits.id = user.id();
-  }
-
-  // custom dimensions & metrics
-  var custom = metrics(userTraits, opts);
-  if (len(custom)) window.ga(this._trackerName + 'set', custom);
-
-  this.load('library', this.ready);
-};
-
-/**
- * Loaded?
- *
- * @return {Boolean}
- */
-
-GA.prototype.loaded = function() {
-  return !!window.gaplugins;
-};
-
-/**
- * Page.
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/pages
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications#multiple-hits
- *
- * @api public
- * @param {Page} page
- */
-
-GA.prototype.page = function(page) {
-  var category = page.category();
-  var props = page.properties();
-  var name = page.fullName();
-  var opts = this.options;
-  var campaign = page.proxy('context.campaign') || {};
-  var pageview = {};
-  var pagePath = path(props, this.options);
-  var pageTitle = name || props.title;
-  var pageReferrer = page.referrer() || '';
-  var self = this;
-  var track;
-
-  // store for later
-  // TODO: Why? Document this better
-  this._category = category;
-
-  pageview.page = pagePath;
-  pageview.title = pageTitle;
-  pageview.location = props.url;
-
-  if (campaign.name) pageview.campaignName = campaign.name;
-  if (campaign.source) pageview.campaignSource = campaign.source;
-  if (campaign.medium) pageview.campaignMedium = campaign.medium;
-  if (campaign.content) pageview.campaignContent = campaign.content;
-  if (campaign.term) pageview.campaignKeyword = campaign.term;
-
-  // set
-  var payload = {
-    page: pagePath,
-    title: pageTitle
-  };
-
-  pageview = extend(pageview, setCustomDimenionsAndMetrics(props, opts, self._trackerName));
-
-  if (pageReferrer !== document.referrer) payload.referrer = pageReferrer; // allow referrer override if referrer was manually set
-  window.ga(this._trackerName + 'set', payload);
-
-  if (this.pageCalled) delete pageview.location;
-
-  // send
-  window.ga(this._trackerName + 'send', 'pageview', pageview);
-
-  // categorized pages
-  if (category && this.options.trackCategorizedPages) {
-    track = page.track(category);
-    this.track(track, { nonInteraction: 1 });
-  }
-
-  // named pages
-  if (name && this.options.trackNamedPages) {
-    track = page.track(name);
-    this.track(track, { nonInteraction: 1 });
-  }
-
-  this.pageCalled = true;
-};
-
-/**
- * Identify.
- *
- * @api public
- * @param {Identify} event
- */
-
-GA.prototype.identify = function(identify) {
-  var opts = this.options;
-
-  if (opts.sendUserId && identify.userId()) {
-    window.ga(this._trackerName + 'set', 'userId', identify.userId());
-  }
-
-  // Set dimensions
-  var custom = metrics(identify.traits(), opts);
-  if (len(custom)) window.ga(this._trackerName + 'set', custom);
-};
-
-/**
- * Track.
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/events
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference
- *
- * @param {Track} event
- */
-
-GA.prototype.track = function(track, options) {
-  var contextOpts = track.options(this.name);
-  var interfaceOpts = this.options;
-  var opts = defaults(options || {}, contextOpts);
-  opts = defaults(opts, interfaceOpts);
-  var props = track.properties();
-  var campaign = track.proxy('context.campaign') || {};
-  var self = this;
-
-  var payload = {
-    eventAction: track.event(),
-    eventCategory: track.category() || this._category || 'All',
-    eventLabel: props.label,
-    eventValue: formatValue(props.value || track.revenue()),
-    // Allow users to override their nonInteraction integration setting for any single particluar event.
-    nonInteraction: props.nonInteraction !== undefined ? !!props.nonInteraction : !!opts.nonInteraction
-  };
-
-  if (campaign.name) payload.campaignName = campaign.name;
-  if (campaign.source) payload.campaignSource = campaign.source;
-  if (campaign.medium) payload.campaignMedium = campaign.medium;
-  if (campaign.content) payload.campaignContent = campaign.content;
-  if (campaign.term) payload.campaignKeyword = campaign.term;
-
-  payload = extend(payload, setCustomDimenionsAndMetrics(props, interfaceOpts, self._trackerName));
-
-  window.ga(this._trackerName + 'send', 'event', payload);
-};
-
-/**
- * Order completed.
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce#multicurrency
- *
- * @param {Track} track
- * @api private
- */
-
-GA.prototype.orderCompleted = function(track) {
-  var total = track.total() || track.revenue() || 0;
-  var orderId = track.orderId();
-  var products = track.products();
-  var props = track.properties();
-  var self = this;
-
-  // orderId is required.
-  if (!orderId) return;
-
-  // require ecommerce
-  if (!this.ecommerce) {
-    window.ga(this._trackerName + 'require', 'ecommerce');
-    this.ecommerce = true;
-  }
-
-  // add transaction
-  window.ga(this._trackerName + 'ecommerce:addTransaction', {
-    affiliation: props.affiliation,
-    shipping: track.shipping(),
-    revenue: total,
-    tax: track.tax(),
-    id: orderId,
-    currency: track.currency()
-  });
-
-  // add products
-  each(products, function(product) {
-    var productTrack = createProductTrack(track, product);
-    window.ga(self._trackerName + 'ecommerce:addItem', {
-      category: productTrack.category(),
-      quantity: productTrack.quantity(),
-      price: productTrack.price(),
-      name: productTrack.name(),
-      sku: productTrack.sku(),
-      id: orderId,
-      currency: productTrack.currency()
-    });
-  });
-
-  // send
-  window.ga(this._trackerName + 'ecommerce:send');
-};
-
-/**
- * Initialize (classic).
- *
- * https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApiBasicConfiguration
- */
-
-GA.prototype.initializeClassic = function() {
-  var opts = this.options;
-  var anonymize = opts.anonymizeIp;
-  var domain = opts.domain;
-  var enhanced = opts.enhancedLinkAttribution;
-  var ignore = opts.ignoredReferrers;
-  var sample = opts.siteSpeedSampleRate;
-
-  window._gaq = window._gaq || [];
-  push('_setAccount', opts.trackingId);
-  push('_setAllowLinker', true);
-
-  if (anonymize) push('_gat._anonymizeIp');
-  if (domain) push('_setDomainName', domain);
-  if (sample) push('_setSiteSpeedSampleRate', sample);
-
-  if (enhanced) {
-    var protocol = document.location.protocol === 'https:' ? 'https:' : 'http:';
-    var pluginUrl = protocol + '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
-    push('_require', 'inpage_linkid', pluginUrl);
-  }
-
-  if (ignore) {
-    if (!is.array(ignore)) ignore = [ignore];
-    each(ignore, function(domain) {
-      push('_addIgnoredRef', domain);
-    });
-  }
-
-  if (this.options.doubleClick) {
-    this.load('double click', this.ready);
-  } else {
-    var name = useHttps() ? 'https' : 'http';
-    this.load(name, this.ready);
-  }
-};
-
-/**
- * Loaded? (classic)
- *
- * @return {Boolean}
- */
-
-GA.prototype.loadedClassic = function() {
-  return !!(window._gaq && window._gaq.push !== Array.prototype.push);
-};
-
-/**
- * Page (classic).
- *
- * https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApiBasicConfiguration
- *
- * @param {Page} page
- */
-
-GA.prototype.pageClassic = function(page) {
-  var category = page.category();
-  var props = page.properties();
-  var name = page.fullName();
-  var track;
-
-  push('_trackPageview', path(props, this.options));
-
-  // categorized pages
-  if (category && this.options.trackCategorizedPages) {
-    track = page.track(category);
-    this.track(track, { nonInteraction: 1 });
-  }
-
-  // named pages
-  if (name && this.options.trackNamedPages) {
-    track = page.track(name);
-    this.track(track, { nonInteraction: 1 });
-  }
-};
-
-/**
- * Track (classic).
- *
- * https://developers.google.com/analytics/devguides/collection/gajs/methods/gaJSApiEventTracking
- *
- * @param {Track} track
- */
-
-GA.prototype.trackClassic = function(track, options) {
-  var opts = options || track.options(this.name);
-  var props = track.properties();
-  var revenue = track.revenue();
-  var event = track.event();
-  var category = this._category || track.category() || 'All';
-  var label = props.label;
-  var value = formatValue(revenue || props.value);
-  var nonInteraction = !!(props.nonInteraction || opts.nonInteraction);
-  push('_trackEvent', category, event, label, value, nonInteraction);
-};
-
-/**
- * Completed order.
- *
- * https://developers.google.com/analytics/devguides/collection/gajs/gaTrackingEcommerce
- * https://developers.google.com/analytics/devguides/collection/gajs/gaTrackingEcommerce#localcurrencies
- *
- * @param {Track} track
- * @api private
- */
-
-GA.prototype.completedOrderClassic = function(track) {
-  var total = track.total() || track.revenue() || 0;
-  var orderId = track.orderId();
-  var products = track.products() || [];
-  var props = track.properties();
-  var currency = track.currency();
-
-  // required
-  if (!orderId) return;
-
-  // add transaction
-  push('_addTrans',
-    orderId,
-    props.affiliation,
-    total,
-    track.tax(),
-    track.shipping(),
-    track.city(),
-    track.state(),
-    track.country());
-
-  // add items
-  each(products, function(product) {
-    var track = new Track({ properties: product });
-    push('_addItem',
-      orderId,
-      track.sku(),
-      track.name(),
-      track.category(),
-      track.price(),
-      track.quantity());
-  });
-
-  // send
-  push('_set', 'currencyCode', currency);
-  push('_trackTrans');
-};
-
-/**
- * Return the path based on `properties` and `options`.
- *
- * @param {Object} properties
- * @param {Object} options
- * @return {string|undefined}
- */
-
-function path(properties, options) {
-  if (!properties) return;
-  var str = properties.path;
-  if (options.includeSearch && properties.search) str += properties.search;
-  return str;
-}
-
-/**
- * Set custom dimensions and metrics
- *
- * @param {Properties} props
- * @param {Options} opts
- * @param {String} trackerName
- * @return {Object}
- */
-
-function setCustomDimenionsAndMetrics(props, opts, trackerName) {
-  var ret = {};
-  var custom = metrics(props, opts);
-  if (len(custom)) {
-    if (opts.setAllMappedProps) {
-      window.ga(trackerName + 'set', custom);
-    } else {
-      // Add custom dimensions / metrics to event payload
-      each(custom, function(key, value) {
-        ret[key] = value;
-      });
-      return ret;
-    }
-  }
-}
-
-/**
- * Format the value property to Google's liking.
- *
- * @param {Number} value
- * @return {Number}
- */
-
-function formatValue(value) {
-  if (!value || value < 0) return 0;
-  return Math.round(value);
-}
-
-/**
- * Map google's custom dimensions, metrics & content groupings with `obj`.
- *
- * Example:
- *
- *      metrics({ revenue: 1.9 }, { { metrics : { revenue: 'metric8' } });
- *      // => { metric8: 1.9 }
- *
- *      metrics({ revenue: 1.9 }, {});
- *      // => {}
- *
- * @param {Object} obj
- * @param {Object} data
- * @return {Object|null}
- * @api private
- */
-
-function metrics(obj, data) {
-  var dimensions = data.dimensions;
-  var metrics = data.metrics;
-  var contentGroupings = data.contentGroupings;
-
-  var ret = {};
-
-  each([metrics, dimensions, contentGroupings], function(group) {
-    each(group, function(prop, key) {
-      var value = dot(obj, prop) || obj[prop];
-      if (is.bool(value)) value = value.toString();
-      if (value || value === 0) ret[key] = value;
-    });
-  });
-
-  return ret;
-}
-
-/**
- * Loads ec.js (unless already loaded)
- *
- * @param {Track} track
- */
-
-GA.prototype.loadEnhancedEcommerce = function(track) {
-  var self = this;
-
-  if (!this.enhancedEcommerceLoaded) {
-    window.ga(self._trackerName + 'require', 'ec');
-    this.enhancedEcommerceLoaded = true;
-  }
-
-  // Ensure we set currency for every hit
-  window.ga(self._trackerName + 'set', '&cu', track.currency());
-};
-
-/**
- * Pushes an event and all previously set EE data to GA.
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.pushEnhancedEcommerce = function(track, opts, trackerName) {
-  var self = this;
-  // Send a custom non-interaction event to ensure all EE data is pushed.
-  // Without doing this we'd need to require page display after setting EE data.
-  var args = reject([
-    self._trackerName + 'send',
-    'event',
-    track.category() || 'EnhancedEcommerce',
-    track.event() || 'Action not defined',
-    track.properties().label,
-    extend({ nonInteraction: 1 }, setCustomDimenionsAndMetrics(track.properties(), opts, trackerName))
-  ]);
-  window.ga.apply(window, args);
-};
-
-/**
- * Started order - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#checkout-steps
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.checkoutStartedEnhanced = function(track) {
-  // same as viewed checkout step #1
-  this.checkoutStepViewed(track);
-};
-
-/**
- * Updated order - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#checkout-steps
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.orderUpdatedEnhanced = function(track) {
-  // Same event as started order - will override
-  this.checkoutStartedEnhanced(track);
-};
-
-/**
- * Viewed checkout step - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#checkout-steps
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.checkoutStepViewedEnhanced = function(track) {
-  var products = track.products();
-  var props = track.properties();
-  var options = extractCheckoutOptions(props);
-  var self = this;
-  var opts = this.options;
-
-  this.loadEnhancedEcommerce(track);
-
-  each(products, function(product) {
-    var productTrack = createProductTrack(track, product);
-    enhancedEcommerceTrackProduct(productTrack, self._trackerName, opts);
-  });
-  window.ga(self._trackerName + 'ec:setAction', 'checkout', {
-    step: props.step || 1,
-    option: options || undefined
-  });
-
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-/**
- * Completed checkout step - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#checkout-options
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.checkoutStepCompletedEnhanced = function(track) {
-  var props = track.properties();
-  var options = extractCheckoutOptions(props);
-  var self = this;
-
-  // Only send an event if we have step and options to update
-  if (!props.step || !options) return;
-
-  this.loadEnhancedEcommerce(track);
-
-  window.ga(self._trackerName + 'ec:setAction', 'checkout_option', {
-    step: props.step || 1,
-    option: options
-  });
-
-  window.ga(self._trackerName + 'send', 'event', 'Checkout', 'Option');
-};
-
-/**
- * Completed order - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-transactions
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.orderCompletedEnhanced = function(track) {
-  var total = track.total() || track.revenue() || 0;
-  var orderId = track.orderId();
-  var products = track.products();
-  var props = track.properties();
-  var opts = this.options;
-  var self = this;
-
-  // orderId is required.
-  if (!orderId) return;
-
-  this.loadEnhancedEcommerce(track);
-
-  each(products, function(product) {
-    var productTrack = createProductTrack(track, product);
-    enhancedEcommerceTrackProduct(productTrack, self._trackerName, opts);
-  });
-
-  window.ga(self._trackerName + 'ec:setAction', 'purchase', {
-    id: orderId,
-    affiliation: props.affiliation,
-    revenue: total,
-    tax: track.tax(),
-    shipping: track.shipping(),
-    coupon: track.coupon()
-  });
-
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-/**
- * Refunded order - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-refunds
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.orderRefundedEnhanced = function(track) {
-  var orderId = track.orderId();
-  var products = track.products();
-  var self = this;
-  var opts = this.options;
-
-  // orderId is required.
-  if (!orderId) return;
-
-  this.loadEnhancedEcommerce(track);
-
-  // Without any products it's a full refund
-  each(products, function(product) {
-    var track = new Track({ properties: product });
-    window.ga(self._trackerName + 'ec:addProduct', {
-      id: track.productId() || track.id() || track.sku(),
-      quantity: track.quantity()
-    });
-  });
-
-  window.ga(self._trackerName + 'ec:setAction', 'refund', {
-    id: orderId
-  });
-
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-/**
- * Added product - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#add-remove-cart
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.productAddedEnhanced = function(track) {
-  var self = this;
-  var opts = this.options;
-
-  this.loadEnhancedEcommerce(track);
-  enhancedEcommerceProductAction(track, 'add', null, self._trackerName, opts);
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-/**
- * Removed product - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#add-remove-cart
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.productRemovedEnhanced = function(track) {
-  var self = this;
-  var opts = this.options;
-
-  this.loadEnhancedEcommerce(track);
-  enhancedEcommerceProductAction(track, 'remove', null, self._trackerName, opts);
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-/**
- * Viewed product details - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-detail-view
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.productViewedEnhanced = function(track) {
-  var props = track.properties();
-  var data = {};
-  var self = this;
-  var opts = this.options;
-
-  this.loadEnhancedEcommerce(track);
-  // list property is optional
-  if (props.list) data.list = props.list;
-  enhancedEcommerceProductAction(track, 'detail', data, self._trackerName, opts);
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-/**
- * Clicked product - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-actions
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.productClickedEnhanced = function(track) {
-  var props = track.properties();
-  var data = {};
-  var self = this;
-  var opts = this.options;
-
-  this.loadEnhancedEcommerce(track);
-  // list property is optional
-  if (props.list) data.list = props.list;
-  enhancedEcommerceProductAction(track, 'click', data, self._trackerName, opts);
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-/**
- * Viewed promotion - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-promo-impressions
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.promotionViewedEnhanced = function(track) {
-  var props = track.properties();
-  var self = this;
-  var opts = this.options;
-
-  this.loadEnhancedEcommerce(track);
-  window.ga(self._trackerName + 'ec:addPromo', {
-    id: track.promotionId() || track.id(),
-    name: track.name(),
-    creative: props.creative,
-    position: props.position
-  });
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-/**
- * Clicked promotion - Enhanced Ecommerce
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-promo-clicks
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.promotionClickedEnhanced = function(track) {
-  var props = track.properties();
-  var self = this;
-  var opts = this.options;
-
-  this.loadEnhancedEcommerce(track);
-  window.ga(self._trackerName + 'ec:addPromo', {
-    id: track.promotionId() || track.id(),
-    name: track.name(),
-    creative: props.creative,
-    position: props.position
-  });
-  window.ga(self._trackerName + 'ec:setAction', 'promo_click', {});
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-/**
- * Product List Viewed - Enhanced Ecommerce (Mapped to Product Impression)
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-impression
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.productListViewedEnhanced = function(track) {
-  var props = track.properties();
-  var products = track.products();
-  var self = this;
-  var opts = this.options;
-
-  this.loadEnhancedEcommerce(track);
-
-  each(products, function(product) {
-    // If we don't have an ID/SKU or name, return - GA will reject the impression.
-    var item = new Track({ properties: product });
-    if (!(item.productId() || item.sku()) && !item.name()) return;
-    var impressionObj = {
-      id: item.productId() || item.sku(),
-      name: item.name(),
-      category: item.category() || track.category(),
-      list: props.list_id || track.category() || 'products',
-      brand: item.properties().brand,
-      variant: item.properties().variant,
-      price: item.price(),
-      position: products.map(function(x) { return x.product_id; }).indexOf(item.productId()) + 1
-    };
-
-    impressionObj = extend(impressionObj, metrics(item.properties(), opts));
-
-    for (var prop in impressionObj) {
-      if (impressionObj[prop] === undefined) delete impressionObj[prop];
-    }
-    window.ga(self._trackerName + 'ec:addImpression', impressionObj);
-  });
-
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-/**
- * Product List Filtered - Enhanced Ecommerce (Mapped to Product Impression)
- *
- * https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-impression
- *
- * @api private
- * @param {Track} track
- */
-
-GA.prototype.productListFilteredEnhanced = function(track) {
-  var props = track.properties();
-  var products = track.products();
-  props.filters = props.filters || [];
-  props.sorters = props.sorters || [];
-  var filters = props.filters.map(function(obj) { return obj.type + ':' + obj.value;}).join();
-  var sorts = props.sorts.map(function(obj) { return obj.type + ':' + obj.value;}).join();
-  var self = this;
-  var opts = this.options;
-
-  this.loadEnhancedEcommerce(track);
-  each(products, function(product) {
-    // If we don't have an ID/SKU or name, return - GA will reject the impression.
-    var item = new Track({ properties: product });
-    if (!(item.productId() || item.sku()) && !item.name()) return;
-    var impressionObj = {
-      id: item.productId() || item.sku(),
-      name: item.name(),
-      category: item.category() || track.category(),
-      list: props.list_id || track.category() || 'search results',
-      brand: item.properties().brand,
-      variant: filters + '::' + sorts,
-      price: item.price(),
-      position: products.map(function(x) { return x.product_id; }).indexOf(item.productId()) + 1
-    };
-
-    impressionObj = extend(impressionObj, metrics(item.properties(), opts));
-
-    for (var prop in impressionObj) {
-      if (impressionObj[prop] === undefined) delete impressionObj[prop];
-    }
-    window.ga(self._trackerName + 'ec:addImpression', impressionObj);
-  });
-
-  this.pushEnhancedEcommerce(track, opts, self._trackerName);
-};
-
-
-/**
- * Enhanced ecommerce track product.
- *
- * Simple helper so that we don't repeat `ec:addProduct` everywhere.
- *
- * @api private
- * @param {Track} track
- */
-
-function enhancedEcommerceTrackProduct(track, trackerName, opts) {
-  var props = track.properties();
-  var product = {
-    id: track.productId() || track.id() || track.sku(),
-    name: track.name(),
-    category: track.category(),
-    quantity: track.quantity(),
-    price: track.price(),
-    brand: props.brand,
-    variant: props.variant,
-    currency: track.currency()
-  };
-
-  // https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#product-data
-  // GA requires an integer but our specs says "Number", so it could be a float.
-  if (props.position != null) {
-    product.position = Math.round(props.position);
-  }
-
-  // append coupon if it set
-  // https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce#measuring-transactions
-  var coupon = track.proxy('properties.coupon');
-  if (coupon) product.coupon = coupon;
-
-  product = extend(product, metrics(props, opts));
-  window.ga(trackerName + 'ec:addProduct', product);
-}
-
-/**
- * Set `action` on `track` with `data`.
- *
- * @api private
- * @param {Track} track
- * @param {String} action
- * @param {Object} data
- */
-
-function enhancedEcommerceProductAction(track, action, data, trackerName, opts) {
-  enhancedEcommerceTrackProduct(track, trackerName, opts);
-  window.ga(trackerName + 'ec:setAction', action, data || {});
-}
-
-/**
- * Extracts checkout options.
- *
- * @api private
- * @param {Object} props
- * @return {string|null}
- */
-
-function extractCheckoutOptions(props) {
-  var options = [
-    props.paymentMethod,
-    props.shippingMethod
-  ];
-
-  // Remove all nulls, and join with commas.
-  var valid = reject(options);
-  return valid.length > 0 ? valid.join(', ') : null;
-}
-
-/**
- * Creates a track out of product properties.
- *
- * @api private
- * @param {Track} track
- * @param {Object} properties
- * @return {Track}
- */
-
-function createProductTrack(track, properties) {
-  properties.currency = properties.currency || track.currency();
-  return new Track({ properties: properties });
-}
-
-},{"@ndhoule/defaults":6,"@segment/analytics.js-integration":41,"component-each":59,"extend":73,"global-queue":74,"is":77,"obj-case":85,"object-component":86,"reject":88,"segmentio-facade":95,"use-https":108}],40:[function(require,module,exports){
-'use strict';
-
-/**
- * Module dependencies.
- */
-
-var integration = require('@segment/analytics.js-integration');
-var push = require('global-queue')('dataLayer', { wrap: false });
-
-/**
- * Expose `GTM`.
- */
-
-var GTM = module.exports = integration('Google Tag Manager')
-  .global('dataLayer')
-  .global('google_tag_manager')
-  .option('containerId', '')
-  .option('environment', '')
-  .option('trackNamedPages', true)
-  .option('trackCategorizedPages', true)
-  .tag('no-env', '<script src="//www.googletagmanager.com/gtm.js?id={{ containerId }}&l=dataLayer">')
-  .tag('with-env', '<script src="//www.googletagmanager.com/gtm.js?id={{ containerId }}&l=dataLayer&gtm_preview={{ environment }}">');
-
-/**
- * Initialize.
- *
- * https://developers.google.com/tag-manager
- *
- * @api public
- */
-
-GTM.prototype.initialize = function() {
-  push({ 'gtm.start': Number(new Date()), event: 'gtm.js' });
-
-  if (this.options.environment.length) {
-    this.load('with-env', this.options, this.ready);
-  } else {
-    this.load('no-env', this.options, this.ready);
-  }
 };
 
 /**
@@ -6251,8 +4928,470 @@ GTM.prototype.initialize = function() {
  * @return {boolean}
  */
 
-GTM.prototype.loaded = function() {
-  return !!(window.dataLayer && Array.prototype.push !== window.dataLayer.push);
+Customerio.prototype.loaded = function() {
+  return !!(window._cio && window._cio.push !== Array.prototype.push);
+};
+
+/**
+ * Page.
+ *
+ * https://learn.customer.io/api/#apipageview_event
+ *
+ * @api public
+ * @param {Page} page
+ */
+
+Customerio.prototype.page = function(page) {
+  var name = page.name() || page.url();
+  window._cio.page(name, page.properties());
+};
+
+/**
+ * Identify.
+ *
+ * http://customer.io/docs/api/javascript.html#section-Identify_customers
+ *
+ * @api public
+ * @param {Identify} identify
+ */
+
+Customerio.prototype.identify = function(identify) {
+  if (!identify.userId()) return this.debug('user id required');
+  var traits = identify.traits({ createdAt: 'created' });
+  traits = alias(traits, { created: 'created_at' });
+  traits = convertDates(traits, convertDate);
+  window._cio.identify(traits);
+};
+
+/**
+ * Group.
+ *
+ * @api public
+ * @param {Group} group
+ */
+
+Customerio.prototype.group = function(group) {
+  var traits = group.traits();
+  var user = this.analytics.user();
+
+  traits = alias(traits, function(trait) {
+    return 'Group ' + trait;
+  });
+
+  this.identify(new Identify({
+    userId: user.id(),
+    traits: traits
+  }));
+};
+
+/**
+ * Track.
+ *
+ * http://customer.io/docs/api/javascript.html#section-Track_a_custom_event
+ *
+ * @api public
+ * @param {Track} track
+ */
+
+Customerio.prototype.track = function(track) {
+  var properties = track.properties();
+  properties = convertDates(properties, convertDate);
+  window._cio.track(track.event(), properties);
+};
+
+/**
+ * Convert a date to the format Customer.io supports.
+ *
+ * @api private
+ * @param {Date} date
+ * @return {number}
+ */
+
+function convertDate(date) {
+  return Math.floor(date.getTime() / 1000);
+}
+
+},{"@segment/alias":19,"@segment/analytics.js-integration":42,"@segment/convert-dates":59,"segmentio-facade":116}],42:[function(require,module,exports){
+arguments[4][36][0].apply(exports,arguments)
+},{"./protos":43,"./statics":44,"@ndhoule/clone":6,"@ndhoule/defaults":7,"@ndhoule/extend":11,"component-bind":78,"debug":90,"dup":36,"slug-component":122}],43:[function(require,module,exports){
+arguments[4][37][0].apply(exports,arguments)
+},{"@ndhoule/after":4,"@ndhoule/each":9,"@ndhoule/every":10,"@ndhoule/foldl":12,"@segment/fmt":60,"@segment/load-script":64,"analytics-events":45,"component-emitter":83,"dup":37,"is":98,"load-iframe":101,"next-tick":106,"to-no-case":124}],44:[function(require,module,exports){
+arguments[4][38][0].apply(exports,arguments)
+},{"@ndhoule/each":9,"@ndhoule/includes":13,"component-emitter":83,"domify":93,"dup":38}],45:[function(require,module,exports){
+arguments[4][39][0].apply(exports,arguments)
+},{"dup":39}],46:[function(require,module,exports){
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+
+var integration = require('@segment/analytics.js-integration');
+var each = require('@ndhoule/each');
+var find = require('obj-case');
+var reject = require('reject');
+var extend = require('extend');
+
+/**
+ * Expose `GoogleAdWordsNew` integration.
+ */
+
+var GoogleAdWordsNew = module.exports = integration('Google AdWords New')
+  .option('accountId', '')
+  .option('sendPageView', true)
+  .option('conversionLinker', true)
+  .option('clickConversions', [])
+  .option('pageLoadConversions', [])
+  .option('defaultPageConversion', '')
+  // The ID in this line (i.e. the gtag.js ID) does not determine which account(s) will receive data from the tag; rather, it is used to uniquely identify your global site tag. Which account(s) receive data from the tag is determined by calling the config command (and by using the send_to parameter on an event). For instance, if you use Google Analytics, you may already have the gtag.js global site tag installed on your site. In that case, the gtag.js ID may be that of the Google Analytics property where you first obtained the snippet.
+  .tag('<script src="https://www.googletagmanager.com/gtag/js?id={{ accountId }}">');
+
+/**
+ * Initialize.
+ *
+ * https://support.google.com/adwords/answer/6095821?hl=en&ref_topic=3165803
+ * @api public
+ */
+
+GoogleAdWordsNew.prototype.initialize = function() {
+  var self = this;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function() {
+    window.dataLayer.push(arguments);
+  };
+
+  var config = {};
+  if (this.options.sendPageView === false) config.send_page_view = this.options.sendPageView;
+  if (this.options.conversionLinker === false) config.conversion_linker = this.options.conversionLinker; // not recommended to set this by GA docs — less accurate measurements
+
+  this.load(function() {
+    window.gtag('js', new Date());
+    window.gtag('config', self.options.accountId, config);
+    self.ready();
+  });
+};
+
+/**
+ * Loaded?
+ *
+ * @api public
+ * @return {boolean}
+ */
+
+GoogleAdWordsNew.prototype.loaded = function() {
+  return window.dataLayer.push !== Array.prototype.push;
+};
+
+/**
+ * Page
+ *
+ * https://support.google.com/adwords/answer/6095821?hl=en&ref_topic=3165803
+ * @api public
+ */
+
+GoogleAdWordsNew.prototype.page = function(page) {
+  var self = this;
+  // If there is no pageName, we support firing default Page Load conversion if provided in options
+  var configs = this.options;
+  var pageName = page.name();
+  // If you are naming your `.page()` calls, you should explicitly map each one rather than expecting a fallback to default page conversion
+  if (!pageName && configs.defaultPageConversion) return sendPageLoadConversion(configs.defaultPageConversion);
+
+  // A mapped event can either be a 'Page Load' or a 'Click' conversion in AdWords.
+  // Since the Page Load conversions are meant to just be dropped on a given page, we are mapping named page calls rather than `.track()`
+  var mappedConversion = matchConversion(this.options.pageLoadConversions, pageName);
+
+  if (mappedConversion.id) return sendPageLoadConversion(mappedConversion.id, mappedConversion.override);
+
+  function sendPageLoadConversion(id, override) {
+    var semanticMetadata = reject({
+      send_to: (override || configs.accountId) + '/' + id,
+      // the below are not spec'd props of page API, AdWords accepts can accept them for this type of conversions
+      value: page.options(self.name).value,
+      currency: page.options(self.name).currency,
+      transaction_id: find(page.options(self.name), 'order_id')
+    });
+    var metadata = extend(page.properties(), semanticMetadata);
+    // metadata shouldn't contain PII — warning by Google
+    return window.gtag('event', pageName || 'conversion', metadata);
+  }
+};
+
+/**
+ * Track
+ *
+ * https://support.google.com/adwords/answer/6331314?hl=en&ref_topic=3165803&co=ADWORDS.IsAWNCustomer%3Dtrue&oco=0
+ * https://developers.google.com/adwords-remarketing-tag/
+ * NOTE: If customers want to send conversions to multiple accounts, they should:
+ * "Alternatively, you should consider using cross-account conversion tracking which allows you to have a manager account (MCC) own
+ * the conversion actions and share them with one or more of its sub-accounts. In doing so, you only need to specify a single conversion
+ * identifier in the event snippet. Learn more about cross- account conversion tracking."
+ *
+ * But assuming pushback, we will allow overriding the default AdWords account ID per `.track()` if needed via UI settings
+ * NOTE: Conversion tracking and remarketing functionalities are now combined into a single tag so no need for feature flag for remarketing
+ *
+ * @api public
+ */
+
+GoogleAdWordsNew.prototype.track = function(track) {
+  var self = this;
+  // A mapped event can either be a 'Page Load' or a 'Click' conversion in AdWords.
+  // Depending on what you chose inside Adwords when creating the conversions, we should expect `properties.value` if that is what they want to send
+  // But for purchase events, we should map revenue/total
+  var eventName = track.event();
+  var mappedConversion = matchConversion(this.options.clickConversions, track.event());
+
+  if (mappedConversion.id) {
+    var properties = track.properties({ orderId: 'transaction_id' });
+    var metadata = extend(properties, { send_to: (mappedConversion.override || self.options.accountId) + '/' + mappedConversion.id });
+    // metadata shouldn't contain PII — warning by Google
+    return window.gtag('event', eventName, metadata);
+  }
+};
+
+/**
+ * Order Completed
+ *
+ * https://support.google.com/adwords/answer/6331314?hl=en&ref_topic=3165803&co=ADWORDS.IsAWNCustomer%3Dtrue&oco=0
+ * @api public
+ */
+
+GoogleAdWordsNew.prototype.orderCompleted = function(track) {
+  var self = this;
+  // A mapped event can either be a 'Page Load' or a 'Click' conversion in AdWords.
+  // Depending on what you chose inside Adwords when creating the conversions, we should expect `properties.value` if that is what they want to send
+  // But for purchase events, we should map revenue/total
+  var eventName = track.event();
+  var mappedConversion = matchConversion(this.options.clickConversions, track.event());
+
+  if (mappedConversion.id) {
+    var properties = track.properties({
+      orderId: 'transaction_id',
+      order_id: 'transaction_id',
+      revenue: 'value'
+    });
+    var metadata = extend(properties, { send_to: (mappedConversion.override || self.options.accountId) + '/' + mappedConversion.id });
+    // metadata shouldn't contain PII — warning by Google
+    return window.gtag('event', eventName, metadata);
+  }
+};
+
+/**
+ * Match Mapped AdWords conversions to your `.page()` or `.track()` calls
+ *
+ * @param {Array} mappedConversions
+ * @param {String} segmentEvent
+ */
+
+function matchConversion(mappedConversions, segmentEvent) {
+  var ret = {};
+  each(function(setting) {
+    var conversion = setting.value || setting;
+
+    // to prevent common casing mistakes in our UI
+    if (segmentEvent.toLowerCase() === conversion.event.toLowerCase()) {
+      ret.id = conversion.id;
+      // in case customer has multiple AdWords accounts
+      if (conversion.accountId) ret.override = conversion.accountId;
+    }
+  }, mappedConversions);
+
+  return ret;
+}
+
+},{"@ndhoule/each":9,"@segment/analytics.js-integration":52,"extend":94,"obj-case":107,"reject":109}],47:[function(require,module,exports){
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+
+var ads = require('@segment/ad-params');
+var clone = require('component-clone');
+var cookie = require('component-cookie');
+var extend = require('@ndhoule/extend');
+var integration = require('@segment/analytics.js-integration');
+var json = require('json3');
+var keys = require('@ndhoule/keys');
+var localstorage = require('yields-store');
+var protocol = require('@segment/protocol');
+var send = require('@segment/send-json');
+var topDomain = require('@segment/top-domain');
+var utm = require('@segment/utm-params');
+var uuid = require('uuid').v4;
+var Queue = require('@segment/localstorage-retry');
+
+/**
+ * Cookie options
+ */
+
+var cookieOptions = {
+  // 1 year
+  maxage: 31536000000,
+  secure: false,
+  path: '/'
+};
+
+
+/**
+ * Segment messages can be a maximum of 32kb.
+ */
+var MAX_SIZE = 32 * 1000;
+
+/**
+ * Queue options
+ *
+ * Attempt with exponential backoff for upto 10 times.
+ * Backoff periods are: 1s, 2s, 4s, 8s, 16s, 32s, 64s, 128s (~2m), 256s (~4m),
+ * 512s (~8.5m) and 1024s (~17m).
+ */
+
+var queueOptions = {
+  maxRetryDelay: 360000, // max interval of 1hr. Added as a guard.
+  minRetryDelay: 1000, // first attempt (1s)
+  backoffFactor: 2,
+  maxAttempts: 10,
+  maxItems: 100
+};
+
+/**
+ * Expose `Segment` integration.
+ */
+
+var Segment = exports = module.exports = integration('Segment.io')
+  .option('apiKey', '')
+  .option('apiHost', 'api.segment.io/v1')
+  .option('crossDomainIdServers', [])
+  .option('deleteCrossDomainId', false)
+  .option('saveCrossDomainIdInLocalStorage', true)
+  .option('retryQueue', true)
+  .option('addBundledMetadata', false)
+  .option('unbundledIntegrations', []);
+
+/**
+ * Get the store.
+ *
+ * @return {Function}
+ */
+
+exports.storage = function() {
+  return protocol() === 'file:' || protocol() === 'chrome-extension:' ? localstorage : cookie;
+};
+
+/**
+ * Expose global for testing.
+ */
+
+exports.global = window;
+
+
+/**
+ * Send the given `obj` and `headers` to `url` with the specified `timeout` and
+ * `fn(err, req)`. Exported for testing.
+ *
+ * @param {String} url
+ * @param {Object} obj
+ * @param {Object} headers
+ * @param {long} timeout
+ * @param {Function} fn
+ * @api private
+ */
+
+exports.sendJsonWithTimeout = function(url, obj, headers, timeout, fn) {
+  // only proceed with our new code path when cors is supported. this is
+  // unlikely to happen in production, but we're being safe to preserve backward
+  // compatibility.
+  if (send.type !== 'xhr') {
+    send(url, obj, headers, fn);
+    return;
+  }
+
+  var req = new XMLHttpRequest();
+  req.onerror = fn;
+  req.onreadystatechange = done;
+
+  req.open('POST', url, true);
+
+  req.timeout = timeout;
+  req.ontimeout = fn;
+
+  // TODO: Remove this eslint disable
+  // eslint-disable-next-line guard-for-in
+  for (var k in headers) {
+    req.setRequestHeader(k, headers[k]);
+  }
+  req.send(json.stringify(obj));
+
+  function done() {
+    if (req.readyState === 4) {
+      // Fail on 429 and 5xx HTTP errors
+      if (req.status === 429 || req.status >= 500 && req.status < 600) {
+        fn(new Error('HTTP Error ' + req.status + ' (' + req.statusText + ')'));
+      } else {
+        fn(null, req);
+      }
+    }
+  }
+};
+
+/**
+ * Initialize.
+ *
+ * https://github.com/segmentio/segmentio/blob/master/modules/segmentjs/segment.js/v1/segment.js
+ *
+ * @api public
+ */
+
+Segment.prototype.initialize = function() {
+  var self = this;
+
+  if (this.options.retryQueue) {
+    this._lsqueue = new Queue('segmentio', queueOptions, function(item, done) {
+      // apply sentAt at flush time and reset on each retry
+      // so the tracking-api doesn't interpret a time skew
+      item.msg.sentAt = new Date();
+
+      // send with 10s timeout
+      Segment.sendJsonWithTimeout(item.url, item.msg, item.headers, 10 * 1000, function(err, res) {
+        self.debug('sent %O, received %O', item.msg, [err, res]);
+        if (err) return done(err);
+        done(null, res);
+      });
+    });
+
+    this._lsqueue.start();
+  }
+
+  this.ready();
+
+  this.analytics.on('invoke', function(msg) {
+    var action = msg.action();
+    var listener = 'on' + msg.action();
+    self.debug('%s %o', action, msg);
+    if (self[listener]) self[listener](msg);
+    self.ready();
+  });
+
+  // Delete cross domain identifiers.
+  this.deleteCrossDomainIdIfNeeded();
+
+  // At this moment we intentionally do not want events to be queued while we retrieve the `crossDomainId`
+  // so `.ready` will get called right away and we'll try to figure out `crossDomainId`
+  // separately
+  if (this.isCrossDomainAnalyticsEnabled()) {
+    this.retrieveCrossDomainId();
+  }
+};
+
+/**
+ * Loaded.
+ *
+ * @api private
+ * @return {boolean}
+ */
+
+Segment.prototype.loaded = function() {
+  return true;
 };
 
 /**
@@ -6262,50 +5401,519 @@ GTM.prototype.loaded = function() {
  * @param {Page} page
  */
 
-GTM.prototype.page = function(page) {
-  var category = page.category();
-  var name = page.fullName();
-  var opts = this.options;
+Segment.prototype.onpage = function(page) {
+  this.enqueue('/p', page.json());
+};
 
-  // all
-  if (opts.trackAllPages) {
-    this.track(page.track());
+/**
+ * Identify.
+ *
+ * @api public
+ * @param {Identify} identify
+ */
+
+Segment.prototype.onidentify = function(identify) {
+  this.enqueue('/i', identify.json());
+};
+
+/**
+ * Group.
+ *
+ * @api public
+ * @param {Group} group
+ */
+
+Segment.prototype.ongroup = function(group) {
+  this.enqueue('/g', group.json());
+};
+
+/**
+ * ontrack.
+ *
+ * TODO: Document this.
+ *
+ * @api private
+ * @param {Track} track
+ */
+
+Segment.prototype.ontrack = function(track) {
+  var json = track.json();
+  // TODO: figure out why we need traits.
+  delete json.traits;
+  this.enqueue('/t', json);
+};
+
+/**
+ * Alias.
+ *
+ * @api public
+ * @param {Alias} alias
+ */
+
+Segment.prototype.onalias = function(alias) {
+  var json = alias.json();
+  var user = this.analytics.user();
+  json.previousId = json.previousId || json.from || user.id() || user.anonymousId();
+  json.userId = json.userId || json.to;
+  delete json.from;
+  delete json.to;
+  this.enqueue('/a', json);
+};
+
+/**
+ * Normalize the given `msg`.
+ *
+ * @api private
+ * @param {Object} msg
+ */
+
+Segment.prototype.normalize = function(msg) {
+  this.debug('normalize %o', msg);
+  var user = this.analytics.user();
+  var global = exports.global;
+  var query = global.location.search;
+  var ctx = msg.context = msg.context || msg.options || {};
+  delete msg.options;
+  msg.writeKey = this.options.apiKey;
+  ctx.userAgent = navigator.userAgent;
+  if (!ctx.library) ctx.library = { name: 'analytics.js', version: this.analytics.VERSION };
+  if (this.isCrossDomainAnalyticsEnabled()) {
+    var crossDomainId = this.getCachedCrossDomainId();
+    if (crossDomainId) {
+      if (!ctx.traits) {
+        ctx.traits = { crossDomainId: crossDomainId };
+      } else if (!ctx.traits.crossDomainId) {
+        ctx.traits.crossDomainId = crossDomainId;
+      }
+    }
+  }
+  // if user provides campaign via context, do not overwrite with UTM qs param
+  if (query && !ctx.campaign) {
+    ctx.campaign = utm(query);
+  }
+  this.referrerId(query, ctx);
+  msg.userId = msg.userId || user.id();
+  msg.anonymousId = user.anonymousId();
+  msg.sentAt = new Date();
+  // Add _metadata.
+  var failedInitializations = this.analytics.failedInitializations || [];
+  if (failedInitializations.length > 0) {
+    msg._metadata = { failedInitializations: failedInitializations };
+  }
+  if (this.options.addBundledMetadata) {
+    var bundled = keys(this.analytics.Integrations);
+    msg._metadata = msg._metadata || {};
+    msg._metadata.bundled = bundled;
+    msg._metadata.unbundled = this.options.unbundledIntegrations;
+  }
+  this.debug('normalized %o', msg);
+  this.ampId(ctx);
+  return msg;
+};
+
+/**
+ * Add amp id if it exists.
+ *
+ * @param {Object} ctx
+ */
+
+Segment.prototype.ampId = function(ctx) {
+  var ampId = this.cookie('segment_amp_id');
+  if (ampId) ctx.amp = { id: ampId };
+};
+
+/**
+ * Send `obj` to `path`.
+ *
+ * @api private
+ * @param {string} path
+ * @param {Object} obj
+ * @param {Function} fn
+ */
+
+Segment.prototype.enqueue = function(path, msg, fn) {
+  var url = 'https://' + this.options.apiHost + path;
+  var headers = { 'Content-Type': 'text/plain' };
+  msg = this.normalize(msg);
+
+  // Print a log statement when messages exceed the maximum size. In the future,
+  // we may consider dropping this event on the client entirely.
+  if (json.stringify(msg).length > MAX_SIZE) {
+    this.debug('message must be less than 32kb %O', msg);
   }
 
-  // categorized
-  if (category && opts.trackCategorizedPages) {
-    this.track(page.track(category));
-  }
+  this.debug('enqueueing %O', msg);
 
-  // named
-  if (name && opts.trackNamedPages) {
-    this.track(page.track(name));
+  var self = this;
+  if (this.options.retryQueue) {
+    this._lsqueue.addItem({
+      url: url,
+      headers: headers,
+      msg: msg
+    });
+  } else {
+    send(url, msg, headers, function(err, res) {
+      self.debug('sent %O, received %O', msg, [err, res]);
+      if (fn) {
+        if (err) return fn(err);
+        fn(null, res);
+      }
+    });
   }
 };
 
 /**
- * Track.
+ * Gets/sets cookies on the appropriate domain.
  *
- * https://developers.google.com/tag-manager/devguide#events
- *
- * @api public
- * @param {Track} track
+ * @api private
+ * @param {string} name
+ * @param {*} val
  */
 
-GTM.prototype.track = function(track) {
-  var props = track.properties();
-  var userId = this.analytics.user().id();
-  var anonymousId = this.analytics.user().anonymousId();
-  if (userId) props.userId = userId;
-  if (anonymousId) props.segmentAnonymousId = anonymousId;
-  props.event = track.event();
-
-  push(props);
+Segment.prototype.cookie = function(name, val) {
+  var store = Segment.storage();
+  if (arguments.length === 1) return store(name);
+  var global = exports.global;
+  var href = global.location.href;
+  var domain = '.' + topDomain(href);
+  if (domain === '.') domain = '';
+  this.debug('store domain %s -> %s', href, domain);
+  var opts = clone(cookieOptions);
+  opts.domain = domain;
+  this.debug('store %s, %s, %o', name, val, opts);
+  store(name, val, opts);
+  if (store(name)) return;
+  delete opts.domain;
+  this.debug('fallback store %s, %s, %o', name, val, opts);
+  store(name, val, opts);
 };
 
-},{"@segment/analytics.js-integration":41,"global-queue":74}],41:[function(require,module,exports){
-arguments[4][33][0].apply(exports,arguments)
-},{"./protos":42,"./statics":43,"@ndhoule/clone":5,"@ndhoule/defaults":6,"@ndhoule/extend":10,"component-bind":57,"debug":69,"dup":33,"slug-component":101}],42:[function(require,module,exports){
+/**
+ * Add referrerId to context.
+ *
+ * TODO: remove.
+ *
+ * @api private
+ * @param {Object} query
+ * @param {Object} ctx
+ */
+
+Segment.prototype.referrerId = function(query, ctx) {
+  var stored = this.cookie('s:context.referrer');
+  var ad;
+
+  if (stored) stored = json.parse(stored);
+  if (query) ad = ads(query);
+
+  ad = ad || stored;
+
+  if (!ad) return;
+  ctx.referrer = extend(ctx.referrer || {}, ad);
+  this.cookie('s:context.referrer', json.stringify(ad));
+};
+
+/**
+ * isCrossDomainAnalyticsEnabled returns true if cross domain analytics is enabled.
+ * This field is not directly supplied, so it is inferred by inspecting the
+ * `crossDomainIdServers` array in settings. If this array is null or empty,
+ * it is assumed that cross domain analytics is disabled.
+ *
+ * @api private
+ */
+Segment.prototype.isCrossDomainAnalyticsEnabled = function() {
+  if (!this.options.crossDomainIdServers) {
+    return false;
+  }
+  return this.options.crossDomainIdServers.length > 0;
+};
+
+/**
+ * retrieveCrossDomainId.
+ *
+ * @api private
+ * @param {function) callback => err, {crossDomainId, fromServer, timestamp}
+ */
+Segment.prototype.retrieveCrossDomainId = function(callback) {
+  if (!this.isCrossDomainAnalyticsEnabled()) {
+    // Callback is only provided in tests.
+    if (callback) {
+      callback('crossDomainId not enabled', null);
+    }
+    return;
+  }
+
+  var cachedCrossDomainId = this.getCachedCrossDomainId();
+  if (cachedCrossDomainId) {
+    // Callback is only provided in tests.
+    if (callback) {
+      callback(null, {
+        crossDomainId: cachedCrossDomainId
+      });
+    }
+    return;
+  }
+
+  var self = this;
+  var writeKey = this.options.apiKey;
+
+  // Exclude the current domain from the list of servers we're querying
+  var currentTld = getTld(window.location.hostname);
+  var domains = [];
+  for (var i = 0; i < this.options.crossDomainIdServers.length; i++) {
+    var domain = this.options.crossDomainIdServers[i];
+    if (getTld(domain) !== currentTld) {
+      domains.push(domain);
+    }
+  }
+
+  getCrossDomainIdFromServerList(domains, writeKey, function(err, res) {
+    if (err) {
+      // Callback is only provided in tests.
+      if (callback) {
+        callback(err, null);
+      }
+      // We optimize for no conflicting xid as much as possible. So bail out if there is an
+      // error and we cannot be sure that xid does not exist on any other domains.
+      return;
+    }
+
+    var crossDomainId = null;
+    var fromDomain = null;
+    if (res) {
+      crossDomainId = res.id;
+      fromDomain = res.domain;
+    } else {
+      crossDomainId = uuid();
+      fromDomain = window.location.hostname;
+    }
+
+    self.saveCrossDomainId(crossDomainId);
+    self.analytics.identify({
+      crossDomainId: crossDomainId
+    });
+
+    // Callback is only provided in tests.
+    if (callback) {
+      callback(null, {
+        crossDomainId: crossDomainId,
+        fromDomain: fromDomain
+      });
+    }
+  });
+};
+
+/**
+ * getCachedCrossDomainId returns the cross domain identifier stored on the client based on the `saveCrossDomainIdInLocalStorage` flag.
+ * If `saveCrossDomainIdInLocalStorage` is false, it reads it from the `seg_xid` cookie.
+ * If `saveCrossDomainIdInLocalStorage` is true, it reads it from the `seg_xid` key in localStorage.
+ * 
+ * @return {string} crossDomainId
+ */
+Segment.prototype.getCachedCrossDomainId = function() {
+  if (this.options.saveCrossDomainIdInLocalStorage) {
+    return localstorage('seg_xid');
+  }
+  return this.cookie('seg_xid');
+};
+
+/**
+ * saveCrossDomainId saves the cross domain identifier. The implementation differs based on the `saveCrossDomainIdInLocalStorage` flag.
+ * If `saveCrossDomainIdInLocalStorage` is false, it saves it as the `seg_xid` cookie.
+ * If `saveCrossDomainIdInLocalStorage` is true, it saves it to localStorage (so that it can be accessed on the current domain)
+ * and as a httpOnly cookie (so that can it can be provided to other domains).
+ *
+ * @api private
+ */
+Segment.prototype.saveCrossDomainId = function(crossDomainId) {
+  if (!this.options.saveCrossDomainIdInLocalStorage) {
+    this.cookie('seg_xid', crossDomainId);
+    return;
+  }
+
+  var self = this;
+
+  // Save the cookie by making a request to the xid server for the current domain.
+  var currentTld = getTld(window.location.hostname);
+  for (var i = 0; i < this.options.crossDomainIdServers.length; i++) {
+    var domain = this.options.crossDomainIdServers[i];
+    if (getTld(domain) === currentTld) {
+      var writeKey = this.options.apiKey;
+      var url = 'https://' + domain + '/v1/saveId?writeKey=' + writeKey + '&xid=' + crossDomainId;
+
+      httpGet(url, function(err, res) {
+        if (err) {
+          self.debug('could not save id on %O, received %O', url, [err, res]);
+          return;
+        }
+
+        localstorage('seg_xid', crossDomainId);
+      });
+      return;
+    }
+  }
+};
+
+/**
+ * Deletes any state persisted by cross domain analytics.
+ * * seg_xid (and metadata) from cookies
+ * * seg_xid from localStorage
+ * * crossDomainId from traits in localStorage
+ *
+ * The deletion logic is run only if deletion is enabled for this project, and only
+ * deletes the data that actually exists.
+ *
+ * @api private
+ */
+Segment.prototype.deleteCrossDomainIdIfNeeded = function() {
+  // Only continue if deletion is enabled for this project.
+  if (!this.options.deleteCrossDomainId) {
+    return;
+  }
+
+  // Delete the xid cookie if it exists. We also delete associated metadata.
+  if (this.cookie('seg_xid')) {
+    this.cookie('seg_xid', null);
+    this.cookie('seg_xid_fd', null);
+    this.cookie('seg_xid_ts', null);
+  }
+
+  // Delete the xid from localStorage if it exists.
+  if (localstorage('seg_xid')) {
+    localstorage('seg_xid', null);
+  }
+
+  // Delete the crossDomainId trait in localStorage if it exists.
+  if (this.analytics.user().traits().crossDomainId) {
+    // This intentionally uses an internal API, so that
+    // we can avoid interacting with lower level localStorage APIs, and instead
+    // leverage existing functionality inside analytics.js.
+
+    var traits = this.analytics.user().traits();
+    delete traits.crossDomainId;
+    this.analytics.user()._setTraits(traits);
+  }
+};
+
+/**
+ * getCrossDomainIdFromServers
+ * @param {Array} domains
+ * @param {string} writeKey
+ * @param {function} callback => err, {domain, id}
+ */
+function getCrossDomainIdFromServerList(domains, writeKey, callback) {
+  // Should not happen but special case
+  if (domains.length === 0) {
+    callback(null, null);
+  }
+  var crossDomainIdFound = false;
+  var finishedRequests = 0;
+  var error = null;
+  for (var i=0; i<domains.length; i++) {
+    var domain = domains[i];
+
+    getCrossDomainIdFromSingleServer(domain, writeKey, function(err, res) {
+      finishedRequests++;
+      if (err) {
+        // if request against a particular domain fails, we won't early exit
+        // but rather wait and see if requests to other domains succeed
+        error = err;
+      } else if (res && res.id && !crossDomainIdFound) {
+        // If we found an xid from any of the servers, we'll just early exit and callback
+        crossDomainIdFound = true;
+        callback(null, res);
+      }
+      if (finishedRequests === domains.length && !crossDomainIdFound) {
+        // Error is non-null if we encountered an issue, otherwise error will be null
+        // meaning that no domains in the list has an xid for current user
+        callback(error, null);
+      }
+    });
+  }
+}
+
+/**
+ * getCrossDomainId
+ * @param {Array} domain
+ * @param {string} writeKey
+ * @param {function} callback => err, {domain, id}
+ */
+function getCrossDomainIdFromSingleServer(domain, writeKey, callback) {
+  var endpoint = 'https://' + domain + '/v1/id/' + writeKey;
+  getJson(endpoint, function(err, res) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, {
+        domain: domain,
+        id: res && res.id || null
+      });
+    }
+  });
+}
+
+/**
+ * getJson
+ * @param {string} url
+ * @param {function} callback => err, json
+ */
+function getJson(url, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.withCredentials = true;
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        callback(null, xhr.responseText ? json.parse(xhr.responseText) : null);
+      } else {
+        callback(xhr.statusText || 'Unknown Error', null);
+      }
+    }
+  };
+  xhr.send();
+}
+
+/**
+ * get makes a get request to the given URL.
+ * @param {string} url
+ * @param {function} callback => err, response
+ */
+function httpGet(url, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.withCredentials = true;
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        callback(null, xhr.responseText);
+      } else {
+        callback(xhr.statusText || xhr.responseText || 'Unknown Error', null);
+      }
+    }
+  };
+  xhr.send();
+}
+
+/**
+ * getTld
+ * Get domain.com from subdomain.domain.com, etc.
+ * @param {string} domain
+ * @return {string} tld
+ */
+function getTld(domain) {
+  return domain.split('.').splice(-2).join('.');
+}
+
+},{"@ndhoule/extend":11,"@ndhoule/keys":14,"@segment/ad-params":18,"@segment/analytics.js-integration":48,"@segment/localstorage-retry":66,"@segment/protocol":71,"@segment/send-json":72,"@segment/top-domain":74,"@segment/utm-params":75,"component-clone":79,"component-cookie":80,"json3":99,"uuid":129,"yields-store":130}],48:[function(require,module,exports){
+arguments[4][36][0].apply(exports,arguments)
+},{"./protos":49,"./statics":50,"@ndhoule/clone":6,"@ndhoule/defaults":7,"@ndhoule/extend":11,"component-bind":78,"debug":90,"dup":36,"slug-component":122}],49:[function(require,module,exports){
+arguments[4][37][0].apply(exports,arguments)
+},{"@ndhoule/after":4,"@ndhoule/each":9,"@ndhoule/every":10,"@ndhoule/foldl":12,"@segment/fmt":60,"@segment/load-script":64,"analytics-events":51,"component-emitter":83,"dup":37,"is":98,"load-iframe":101,"next-tick":106,"to-no-case":124}],50:[function(require,module,exports){
+arguments[4][38][0].apply(exports,arguments)
+},{"@ndhoule/each":9,"@ndhoule/includes":13,"component-emitter":83,"domify":93,"dup":38}],51:[function(require,module,exports){
+arguments[4][39][0].apply(exports,arguments)
+},{"dup":39}],52:[function(require,module,exports){
+arguments[4][36][0].apply(exports,arguments)
+},{"./protos":53,"./statics":54,"@ndhoule/clone":6,"@ndhoule/defaults":7,"@ndhoule/extend":11,"component-bind":78,"debug":90,"dup":36,"slug-component":122}],53:[function(require,module,exports){
 'use strict';
 
 /**
@@ -6775,7 +6383,7 @@ function render(template, locals) {
   }, {}, template.attrs);
 }
 
-},{"@ndhoule/after":3,"@ndhoule/each":8,"@ndhoule/every":9,"@ndhoule/foldl":11,"@segment/fmt":47,"@segment/load-script":51,"analytics-events":55,"component-emitter":44,"is":77,"load-iframe":79,"next-tick":84,"to-no-case":45}],43:[function(require,module,exports){
+},{"@ndhoule/after":4,"@ndhoule/each":9,"@ndhoule/every":10,"@ndhoule/foldl":12,"@segment/fmt":60,"@segment/load-script":64,"analytics-events":76,"component-emitter":55,"is":98,"load-iframe":101,"next-tick":106,"to-no-case":56}],54:[function(require,module,exports){
 'use strict';
 
 /**
@@ -6940,11 +6548,48 @@ function objectify(str) {
   };
 }
 
-},{"@ndhoule/each":8,"@ndhoule/includes":12,"component-emitter":44,"domify":72}],44:[function(require,module,exports){
-arguments[4][27][0].apply(exports,arguments)
-},{"dup":27}],45:[function(require,module,exports){
-arguments[4][37][0].apply(exports,arguments)
-},{"dup":37}],46:[function(require,module,exports){
+},{"@ndhoule/each":9,"@ndhoule/includes":13,"component-emitter":55,"domify":93}],55:[function(require,module,exports){
+arguments[4][30][0].apply(exports,arguments)
+},{"dup":30}],56:[function(require,module,exports){
+arguments[4][40][0].apply(exports,arguments)
+},{"dup":40}],57:[function(require,module,exports){
+var utf8Encode = require('utf8-encode');
+var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+module.exports = encode;
+function encode(input) {
+    var output = "";
+    var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+    var i = 0;
+
+    input = utf8Encode(input);
+
+    while (i < input.length) {
+
+        chr1 = input.charCodeAt(i++);
+        chr2 = input.charCodeAt(i++);
+        chr3 = input.charCodeAt(i++);
+
+        enc1 = chr1 >> 2;
+        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+        enc4 = chr3 & 63;
+
+        if (isNaN(chr2)) {
+            enc3 = enc4 = 64;
+        } else if (isNaN(chr3)) {
+            enc4 = 64;
+        }
+
+        output = output +
+            keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+            keyStr.charAt(enc3) + keyStr.charAt(enc4);
+
+    }
+
+    return output;
+}
+},{"utf8-encode":127}],58:[function(require,module,exports){
 'use strict';
 
 /**
@@ -6968,7 +6613,44 @@ function canonical() {
 
 module.exports = canonical;
 
-},{}],47:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
+'use strict';
+
+/*
+ * Module dependencies.
+ */
+
+var clone = require('@ndhoule/clone');
+var each = require('@ndhoule/each');
+var type = require('component-type');
+
+/**
+ * Recursively convert an `obj`'s dates to new values.
+ *
+ * @param {Object} obj
+ * @param {Function} convert
+ * @return {Object}
+ */
+function convertDates(obj, convert) {
+  obj = clone(obj);
+  each(function(val, key) {
+    if (type(val) === 'date') {
+      obj[key] = convert(val);
+    }
+    if (type(val) === 'object' || type(val) === 'array') {
+      obj[key] = convertDates(val, convert);
+    }
+  }, obj);
+  return obj;
+}
+
+/*
+ * Exports.
+ */
+
+module.exports = convertDates;
+
+},{"@ndhoule/clone":6,"@ndhoule/each":9,"component-type":88}],60:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -7003,7 +6685,7 @@ fmt.d = parseInt;
 module.exports = fmt;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],48:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 'use strict';
 
 function isMeta(e) {
@@ -7031,7 +6713,7 @@ function isMeta(e) {
 
 module.exports = isMeta;
 
-},{}],49:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 'use strict';
 
 var type = require('component-type');
@@ -7108,7 +6790,7 @@ function array(arr, strict) {
   return arr;
 }
 
-},{"@segment/isodate":50,"component-each":59,"component-type":66}],50:[function(require,module,exports){
+},{"@segment/isodate":63,"component-each":81,"component-type":88}],63:[function(require,module,exports){
 'use strict';
 
 /**
@@ -7186,7 +6868,7 @@ exports.is = function(string, strict) {
   return matcher.test(string);
 };
 
-},{}],51:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 'use strict';
 
 /*
@@ -7258,7 +6940,651 @@ function loadScript(options, cb) {
 
 module.exports = loadScript;
 
-},{"component-type":66,"next-tick":84,"script-onload":89}],52:[function(require,module,exports){
+},{"component-type":88,"next-tick":106,"script-onload":110}],65:[function(require,module,exports){
+'use strict';
+
+var keys = require('@ndhoule/keys');
+var uuid = require('uuid').v4;
+
+var inMemoryStore = {
+  _data: {},
+  length: 0,
+  setItem: function(key, value) {
+    this._data[key] = value;
+    this.length = keys(this._data).length;
+    return value;
+  },
+  getItem: function(key) {
+    if (key in this._data) {
+      return this._data[key];
+    }
+    return null;
+  },
+  removeItem: function(key) {
+    if (key in this._data) {
+      delete this._data[key];
+    }
+    this.length = keys(this._data).length;
+    return null;
+  },
+  clear: function() {
+    this._data = {};
+    this.length = 0;
+  },
+  key: function(index) {
+    return keys(this._data)[index];
+  }
+};
+
+function isSupportedNatively() {
+  try {
+    if (!window.localStorage) return false;
+    var key = uuid();
+    window.localStorage.setItem(key, 'test_value');
+    var value = window.localStorage.getItem(key);
+    window.localStorage.removeItem(key);
+
+    // handle localStorage silently failing
+    return value === 'test_value';
+  } catch (e) {
+    // Can throw if localStorage is disabled
+    return false;
+  }
+}
+
+function pickStorage() {
+  if (isSupportedNatively()) {
+    return window.localStorage;
+  }
+  // fall back to in-memory
+  return inMemoryStore;
+}
+
+// Return a shared instance
+module.exports.defaultEngine = pickStorage();
+// Expose the in-memory store explicitly for testing
+module.exports.inMemoryEngine = inMemoryStore;
+
+},{"@ndhoule/keys":14,"uuid":129}],66:[function(require,module,exports){
+'use strict';
+
+var uuid = require('@lukeed/uuid').v4;
+var Store = require('./store');
+var each = require('@ndhoule/each');
+var Schedule = require('./schedule');
+var debug = require('debug')('localstorage-retry');
+var Emitter = require('component-emitter');
+
+// Some browsers don't support Function.prototype.bind, so just including a simplified version here
+function bind(func, obj) {
+  return function() {
+    return func.apply(obj, arguments);
+  };
+}
+
+/**
+ * @callback processFunc
+ * @param {Mixed} item The item added to the queue to process
+ * @param {Function} done A function to call when processing is completed.
+ *   @param {Error} Optional error parameter if the processing failed
+ *   @param {Response} Optional response parameter to emit for async handling
+ */
+
+/**
+ * Constructs a Queue backed by localStorage
+ *
+ * @constructor
+ * @param {String} name The name of the queue. Will be used to find abandoned queues and retry their items
+ * @param {Object} [opts] Optional argument to override `maxItems`, `maxAttempts`, `minRetryDelay, `maxRetryDelay`, `backoffFactor` and `backoffJitter`.
+ * @param {processFunc} fn The function to call in order to process an item added to the queue
+ */
+function Queue(name, opts, fn) {
+  if (typeof opts === 'function') fn = opts;
+  this.name = name;
+  this.id = uuid();
+  this.fn = fn;
+  this.maxItems = opts.maxItems || Infinity;
+  this.maxAttempts = opts.maxAttempts || Infinity;
+
+  this.backoff = {
+    MIN_RETRY_DELAY: opts.minRetryDelay || 1000,
+    MAX_RETRY_DELAY: opts.maxRetryDelay || 30000,
+    FACTOR: opts.backoffFactor || 2,
+    JITTER: opts.backoffJitter || 0
+  };
+
+  // painstakingly tuned. that's why they're not "easily" configurable
+  this.timeouts = {
+    ACK_TIMER: 1000,
+    RECLAIM_TIMER: 3000,
+    RECLAIM_TIMEOUT: 10000,
+    RECLAIM_WAIT: 500
+  };
+
+  this.keys = {
+    IN_PROGRESS: 'inProgress',
+    QUEUE: 'queue',
+    RECLAIM_START: 'reclaimStart',
+    RECLAIM_END: 'reclaimEnd',
+    ACK: 'ack'
+  };
+
+  this._schedule = new Schedule();
+  this._processId = 0;
+
+  // Set up our empty queues
+  this._store = new Store(this.name, this.id, this.keys);
+  this._store.set(this.keys.IN_PROGRESS, {});
+  this._store.set(this.keys.QUEUE, []);
+
+  // bind recurring tasks for ease of use
+  this._ack = bind(this._ack, this);
+  this._checkReclaim = bind(this._checkReclaim, this);
+  this._processHead = bind(this._processHead, this);
+
+  this._running = false;
+}
+
+/**
+ * Mix in event emitter
+ */
+
+Emitter(Queue.prototype);
+
+/**
+ * Starts processing the queue
+ */
+Queue.prototype.start = function() {
+  if (this._running) {
+    this.stop();
+  }
+  this._running = true;
+  this._ack();
+  this._checkReclaim();
+  this._processHead();
+};
+
+/**
+ * Stops processing the queue
+ */
+Queue.prototype.stop = function() {
+  this._schedule.cancelAll();
+  this._running = false;
+};
+
+/**
+ * Decides whether to retry. Overridable.
+ *
+ * @param {Object} item The item being processed
+ * @param {Number} attemptNumber The attemptNumber (1 for first retry)
+ * @param {Error} error The error from previous attempt, if there was one
+ * @return {Boolean} Whether to requeue the message
+ */
+Queue.prototype.shouldRetry = function(_, attemptNumber) {
+  if (attemptNumber > this.maxAttempts) return false;
+  return true;
+};
+
+/**
+ * Calculates the delay (in ms) for a retry attempt
+ *
+ * @param {Number} attemptNumber The attemptNumber (1 for first retry)
+ * @return {Number} The delay in milliseconds to wait before attempting a retry
+ */
+Queue.prototype.getDelay = function(attemptNumber) {
+  var ms = this.backoff.MIN_RETRY_DELAY * Math.pow(this.backoff.FACTOR, attemptNumber);
+  if (this.backoff.JITTER) {
+    var rand =  Math.random();
+    var deviation = Math.floor(rand * this.backoff.JITTER * ms);
+    if (Math.floor(rand * 10) < 5) {
+      ms -= deviation;
+    } else {
+      ms += deviation;
+    }
+  }
+  return Number(Math.min(ms, this.backoff.MAX_RETRY_DELAY).toPrecision(1));
+};
+
+/**
+ * Adds an item to the queue
+ *
+ * @param {Mixed} item The item to process
+ */
+Queue.prototype.addItem = function(item) {
+  this._enqueue({
+    item: item,
+    attemptNumber: 0,
+    time: this._schedule.now(),
+    id: uuid()
+  });
+};
+
+/**
+ * Adds an item to the retry queue
+ *
+ * @param {Mixed} item The item to retry
+ * @param {Number} attemptNumber The attempt number (1 for first retry)
+ * @param {Error} [error] The error from previous attempt, if there was one
+ * @param {String} [id] The id of the queued message used for tracking duplicate entries
+ */
+Queue.prototype.requeue = function(item, attemptNumber, error, id) {
+  if (this.shouldRetry(item, attemptNumber, error)) {
+    this._enqueue({
+      item: item,
+      attemptNumber: attemptNumber,
+      time: this._schedule.now() + this.getDelay(attemptNumber),
+      id: id || uuid()
+    });
+  } else {
+    this.emit('discard', item, attemptNumber);
+  }
+};
+
+Queue.prototype._enqueue = function(entry) {
+  var queue = this._store.get(this.keys.QUEUE) || [];
+  queue = queue.slice(-(this.maxItems - 1));
+  queue.push(entry);
+  queue = queue.sort(function(a,b) {
+    return a.time - b.time;
+  });
+
+  this._store.set(this.keys.QUEUE, queue);
+
+  if (this._running) {
+    this._processHead();
+  }
+};
+
+Queue.prototype._processHead = function() {
+  var self = this;
+  var store = this._store;
+
+  // cancel the scheduled task if it exists
+  this._schedule.cancel(this._processId);
+
+  // Pop the head off the queue
+  var queue = store.get(this.keys.QUEUE) || [];
+  var inProgress = store.get(this.keys.IN_PROGRESS) || {};
+  var now = this._schedule.now();
+  var toRun = [];
+
+  function enqueue(el, id) {
+    toRun.push({
+      item: el.item,
+      done: function handle(err, res) {
+        var inProgress = store.get(self.keys.IN_PROGRESS) || {};
+        delete inProgress[id];
+        store.set(self.keys.IN_PROGRESS, inProgress);
+        self.emit('processed', err, res, el.item);
+        if (err) {
+          self.requeue(el.item, el.attemptNumber + 1, err, el.id);
+        }
+      }
+    });
+  }
+
+  var inProgressSize = Object.keys(inProgress).length;
+
+  while (queue.length && queue[0].time <= now && inProgressSize++ < self.maxItems) {
+    var el = queue.shift();
+    var id = uuid();
+
+    // Save this to the in progress map
+    inProgress[id] = {
+      item: el.item,
+      attemptNumber: el.attemptNumber,
+      time: self._schedule.now()
+    };
+
+    enqueue(el, id);
+  }
+
+  store.set(this.keys.QUEUE, queue);
+  store.set(this.keys.IN_PROGRESS, inProgress);
+
+  each(function(el) {
+    // TODO: handle fn timeout
+    try {
+      self.fn(el.item, el.done);
+    } catch (err) {
+      debug('Process function threw error: ' + err);
+    }
+  }, toRun);
+
+  // re-read the queue in case the process function finished immediately or added another item
+  queue = store.get(this.keys.QUEUE) || [];
+  this._schedule.cancel(this._processId);
+  if (queue.length > 0) {
+    this._processId = this._schedule.run(this._processHead, queue[0].time - now, Schedule.Modes.ASAP);
+  }
+};
+
+// Ack continuously to prevent other tabs from claiming our queue
+Queue.prototype._ack = function() {
+  this._store.set(this.keys.ACK, this._schedule.now());
+  this._store.set(this.keys.RECLAIM_START, null);
+  this._store.set(this.keys.RECLAIM_END, null);
+  this._schedule.run(this._ack, this.timeouts.ACK_TIMER, Schedule.Modes.ASAP);
+};
+
+Queue.prototype._checkReclaim = function() {
+  var self = this;
+
+  function tryReclaim(store) {
+    store.set(self.keys.RECLAIM_START, self.id);
+    store.set(self.keys.ACK, self._schedule.now());
+
+    self._schedule.run(function() {
+      if (store.get(self.keys.RECLAIM_START) !== self.id) return;
+      store.set(self.keys.RECLAIM_END, self.id);
+
+      self._schedule.run(function() {
+        if (store.get(self.keys.RECLAIM_END) !== self.id) return;
+        if (store.get(self.keys.RECLAIM_START) !== self.id) return;
+        self._reclaim(store.id);
+      }, self.timeouts.RECLAIM_WAIT, Schedule.Modes.ABANDON);
+    }, self.timeouts.RECLAIM_WAIT, Schedule.Modes.ABANDON);
+  }
+
+  function findOtherQueues(name) {
+    var res = [];
+    var storage = self._store.getOriginalEngine();
+    for (var i = 0; i < storage.length; i++) {
+      var k = storage.key(i);
+      var parts = k.split('.');
+      if (parts.length !== 3) continue;
+      if (parts[0] !== name) continue;
+      if (parts[2] !== 'ack') continue;
+      res.push(new Store(name, parts[1], self.keys));
+    }
+    return res;
+  }
+
+  each(function(store) {
+    if (store.id === self.id) return;
+    if (self._schedule.now() - store.get(self.keys.ACK) < self.timeouts.RECLAIM_TIMEOUT) return;
+    tryReclaim(store);
+  }, findOtherQueues(this.name));
+
+  this._schedule.run(this._checkReclaim, this.timeouts.RECLAIM_TIMER, Schedule.Modes.RESCHEDULE);
+};
+
+Queue.prototype._reclaim = function(id) {
+  var self = this;
+  var other = new Store(this.name, id, this.keys);
+
+  var our = {
+    queue: this._store.get(this.keys.QUEUE) || []
+  };
+
+  var their = {
+    inProgress: other.get(this.keys.IN_PROGRESS) || {},
+    queue: other.get(this.keys.QUEUE) || []
+  };
+
+  var trackMessageIds = [];
+
+  var addConcatQueue = function(queue, incrementAttemptNumberBy) {
+    each(function(el) {
+      var id = el.id || uuid();
+      if (trackMessageIds.indexOf(id) >= 0) {
+        self.emit('duplication', el.item, el.attemptNumber);
+      } else {
+        our.queue.push({
+          item: el.item,
+          attemptNumber: el.attemptNumber + incrementAttemptNumberBy,
+          time: self._schedule.now(),
+          id: id
+        });
+        trackMessageIds.push(id);
+      }
+    }, queue);
+  };
+
+  // add their queue to ours, resetting run-time to immediate and copying the attempt#
+  addConcatQueue(their.queue, 0);
+
+  // if the queue is abandoned, all the in-progress are failed. retry them immediately and increment the attempt#
+  addConcatQueue(their.inProgress, 1);
+
+  our.queue = our.queue.sort(function(a,b) {
+    return a.time - b.time;
+  });
+
+  this._store.set(this.keys.QUEUE, our.queue);
+
+  // remove all keys
+  other.remove(this.keys.IN_PROGRESS);
+  other.remove(this.keys.QUEUE);
+  other.remove(this.keys.RECLAIM_START);
+  other.remove(this.keys.RECLAIM_END);
+  other.remove(this.keys.ACK);
+
+  // process the new items we claimed
+  this._processHead();
+};
+
+module.exports = Queue;
+
+},{"./schedule":67,"./store":68,"@lukeed/uuid":3,"@ndhoule/each":9,"component-emitter":83,"debug":69}],67:[function(require,module,exports){
+'use strict';
+
+var each = require('@ndhoule/each');
+
+var CLOCK_LATE_FACTOR = 2;
+
+var defaultClock = {
+  setTimeout: function(fn, ms) {
+    return window.setTimeout(fn, ms);
+  },
+  clearTimeout: function(id) {
+    return window.clearTimeout(id);
+  },
+  Date: window.Date
+};
+
+var clock = defaultClock;
+
+var modes = {
+  ASAP: 1,
+  RESCHEDULE: 2,
+  ABANDON: 3
+};
+
+function Schedule() {
+  this.tasks = {};
+  this.nextId = 1;
+}
+
+Schedule.prototype.now = function() {
+  return +new clock.Date();
+};
+
+Schedule.prototype.run = function(task, timeout, mode) {
+  var id = this.nextId++;
+
+  this.tasks[id] = clock.setTimeout(this._handle(id, task, timeout, mode || modes.ASAP), timeout);
+  return id;
+};
+
+Schedule.prototype.cancel = function(id) {
+  if (this.tasks[id]) {
+    clock.clearTimeout(this.tasks[id]);
+    delete this.tasks[id];
+  }
+};
+
+Schedule.prototype.cancelAll = function() {
+  each(clock.clearTimeout, this.tasks);
+  this.tasks = {};
+};
+
+Schedule.prototype._handle = function(id, callback, timeout, mode) {
+  var self = this;
+  var start = self.now();
+  return function() {
+    delete self.tasks[id];
+    if (mode >= modes.RESCHEDULE && start + timeout * CLOCK_LATE_FACTOR < self.now()) {
+      if (mode === modes.RESCHEDULE) {
+        self.run(callback, timeout, mode);
+      }
+      return;
+    }
+    return callback();
+  };
+};
+
+Schedule.setClock = function(newClock) {
+  clock = newClock;
+};
+
+Schedule.resetClock = function() {
+  clock = defaultClock;
+};
+
+Schedule.Modes = modes;
+
+module.exports = Schedule;
+
+},{"@ndhoule/each":9}],68:[function(require,module,exports){
+'use strict';
+
+var defaultEngine = require('./engine').defaultEngine;
+var inMemoryEngine = require('./engine').inMemoryEngine;
+var each = require('@ndhoule/each');
+var keys = require('@ndhoule/keys');
+var json = JSON;
+
+/**
+* Store Implementation with dedicated
+*/
+
+function Store(name, id, keys, optionalEngine) {
+  this.id = id;
+  this.name = name;
+  this.keys = keys || {};
+  this.engine = optionalEngine || defaultEngine;
+  this.originalEngine = this.engine;
+}
+
+/**
+* Set value by key.
+*/
+
+Store.prototype.set = function(key, value) {
+  var compoundKey = this._createValidKey(key);
+  if (!compoundKey) return;
+  try {
+    this.engine.setItem(compoundKey, json.stringify(value));
+  } catch (err) {
+    if (isQuotaExceeded(err)) {
+      // switch to inMemory engine
+      this._swapEngine();
+      // and save it there
+      this.set(key, value);
+    }
+  }
+};
+
+/**
+* Get by Key.
+*/
+
+Store.prototype.get = function(key) {
+  try {
+    var str = this.engine.getItem(this._createValidKey(key));
+    if (str === null) {
+      return null;
+    }
+    return json.parse(str);
+  } catch (err) {
+    return null;
+  }
+};
+
+/**
+ * Get original engine
+ */
+
+Store.prototype.getOriginalEngine = function() {
+  return this.originalEngine;
+};
+
+/**
+* Remove by Key.
+*/
+
+Store.prototype.remove = function(key) {
+  this.engine.removeItem(this._createValidKey(key));
+};
+
+/**
+* Ensure the key is valid
+*/
+
+Store.prototype._createValidKey = function(key) {
+  var name = this.name;
+  var id = this.id;
+
+  if (!keys(this.keys).length) return [name, id, key].join('.');
+
+  // validate and return undefined if invalid key
+  var compoundKey;
+  each(function(value) {
+    if (value === key) {
+      compoundKey = [name, id, key].join('.');
+    }
+  }, this.keys);
+  return compoundKey;
+};
+
+/**
+* Switch to inMemoryEngine, bringing any existing data with.
+*/
+
+Store.prototype._swapEngine = function() {
+  var self = this;
+
+  // grab existing data, but only for this page's queue instance, not all
+  // better to keep other queues in localstorage to be flushed later
+  // than to pull them into memory and remove them from durable storage
+  each(function(key) {
+    var value = self.get(key);
+    inMemoryEngine.setItem([self.name, self.id, key].join('.'), value);
+    self.remove(key);
+  }, this.keys);
+
+  this.engine = inMemoryEngine;
+};
+
+module.exports = Store;
+
+function isQuotaExceeded(e) {
+  var quotaExceeded = false;
+  if (e.code) {
+    switch (e.code) {
+    case 22:
+      quotaExceeded = true;
+      break;
+    case 1014:
+      // Firefox
+      if (e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+        quotaExceeded = true;
+      }
+      break;
+    default:
+      break;
+    }
+  } else if (e.number === -2147024882) {
+    // Internet Explorer 8
+    quotaExceeded = true;
+  }
+  return quotaExceeded;
+}
+
+},{"./engine":65,"@ndhoule/each":9,"@ndhoule/keys":14}],69:[function(require,module,exports){
+arguments[4][31][0].apply(exports,arguments)
+},{"dup":31}],70:[function(require,module,exports){
 'use strict';
 
 /**
@@ -7283,7 +7609,210 @@ function preventDefault(e) {
 
 module.exports = preventDefault;
 
-},{}],53:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
+'use strict';
+
+/**
+ * Convenience alias
+ */
+
+var define = Object.defineProperty;
+
+
+/**
+ *  The base protocol
+ */
+
+var initialProtocol = window.location.protocol;
+
+/**
+ * Fallback mocked protocol in case Object.defineProperty doesn't exist.
+ */
+
+var mockedProtocol;
+
+
+module.exports = function(protocol) {
+  if (arguments.length === 0) {
+    return get();
+  }
+  return set(protocol);
+};
+
+
+/**
+ * Sets the protocol to be http:
+ */
+
+module.exports.http = function() {
+  set('http:');
+};
+
+
+/**
+ * Sets the protocol to be https:
+ */
+
+module.exports.https = function() {
+  set('https:');
+};
+
+
+/**
+ * Reset to the initial protocol.
+ */
+
+module.exports.reset = function() {
+  set(initialProtocol);
+};
+
+
+/**
+ * Gets the current protocol, using the fallback and then the native protocol.
+ *
+ * @return {String} protocol
+ */
+
+function get() {
+  return mockedProtocol || window.location.protocol;
+}
+
+
+/**
+ * Sets the protocol
+ *
+ * @param {String} protocol
+ */
+
+function set(protocol) {
+  try {
+    define(window.location, 'protocol', {
+      get: function() { return protocol; }
+    });
+  } catch (err) {
+    mockedProtocol = protocol;
+  }
+}
+
+},{}],72:[function(require,module,exports){
+'use strict';
+
+/*
+ * Module dependencies.
+ */
+
+var JSON = require('json3');
+var base64encode = require('@segment/base64-encode');
+var cors = require('has-cors');
+var jsonp = require('jsonp');
+
+/*
+ * Exports.
+ */
+
+exports = module.exports = cors ? json : base64;
+
+/**
+ * Expose `callback`
+ */
+
+exports.callback = 'callback';
+
+/**
+ * Expose `prefix`
+ */
+
+exports.prefix = 'data';
+
+/**
+ * Expose `json`.
+ */
+
+exports.json = json;
+
+/**
+ * Expose `base64`.
+ */
+
+exports.base64 = base64;
+
+/**
+ * Expose `type`
+ */
+
+exports.type = cors ? 'xhr' : 'jsonp';
+
+/**
+ * Send the given `obj` to `url` with `fn(err, req)`.
+ *
+ * @param {String} url
+ * @param {Object} obj
+ * @param {Object} headers
+ * @param {Function} fn
+ * @api private
+ */
+
+function json(url, obj, headers, fn) {
+  if (arguments.length === 3) fn = headers, headers = {};
+
+  var req = new XMLHttpRequest;
+  req.onerror = fn;
+  req.onreadystatechange = done;
+  req.open('POST', url, true);
+
+  // TODO: Remove this eslint disable
+  // eslint-disable-next-line guard-for-in
+  for (var k in headers) {
+    req.setRequestHeader(k, headers[k]);
+  }
+  req.send(JSON.stringify(obj));
+
+  function done() {
+    if (req.readyState === 4) {
+      return fn(null, req);
+    }
+  }
+}
+
+/**
+ * Send the given `obj` to `url` with `fn(err, req)`.
+ *
+ * @param {String} url
+ * @param {Object} obj
+ * @param {Function} fn
+ * @api private
+ */
+
+function base64(url, obj, _, fn) {
+  if (arguments.length === 3) fn = _;
+
+  var prefix = exports.prefix;
+  var data = encode(obj);
+  url += '?' + prefix + '=' + data;
+  jsonp(url, { param: exports.callback }, function(err, obj) {
+    if (err) return fn(err);
+    fn(null, {
+      url: url,
+      body: obj
+    });
+  });
+}
+
+/**
+ * Encodes `obj`.
+ *
+ * @param {Object} obj
+ */
+
+function encode(obj) {
+  var str = '';
+  str = JSON.stringify(obj);
+  str = base64encode(str);
+  str = str.replace(/\+/g, '-').replace(/\//g, '_');
+  return encodeURIComponent(str);
+}
+
+},{"@segment/base64-encode":57,"has-cors":95,"json3":99,"jsonp":100}],73:[function(require,module,exports){
 (function (global){
 "use strict"
 
@@ -7451,12 +7980,12 @@ module.exports = (function() {
 		store.disabled = true
 	}
 	store.enabled = !store.disabled
-
+	
 	return store
 }())
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"json3":78}],54:[function(require,module,exports){
+},{"json3":99}],74:[function(require,module,exports){
 'use strict';
 
 /**
@@ -7556,7 +8085,86 @@ domain.cookie = cookie;
 
 exports = module.exports = domain;
 
-},{"component-cookie":58,"component-url":67}],55:[function(require,module,exports){
+},{"component-cookie":80,"component-url":89}],75:[function(require,module,exports){
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+
+var foldl = require('@ndhoule/foldl');
+var parse = require('component-querystring').parse;
+
+/**
+ * hasOwnProperty reference.
+ */
+
+var has = Object.prototype.hasOwnProperty;
+
+/**
+ * Get all utm params from the given `querystring`
+ *
+ * @param {String} query
+ * @return {Object}
+ * @api private
+ */
+
+function utm(query) {
+  // Remove leading ? if present
+  if (query.charAt(0) === '?') {
+    query = query.substring(1);
+  }
+
+  query = query.replace(/\?/g, '&');
+
+  var param;
+  var params = parse(query);
+  var results = {};
+
+  for (var key in params) {
+    if (has.call(params, key)) {
+      if (key.substr(0, 4) === 'utm_') {
+        param = key.substr(4);
+        if (param === 'campaign') param = 'name';
+        results[param] = params[key];
+      }
+    }
+  }
+
+  return results;
+}
+
+var allowedKeys = {
+  name: true,
+  term: true,
+  source: true,
+  medium: true,
+  content: true
+};
+
+/**
+ * Get strict utm params - from the given `querystring`
+ *
+ * @param {String} query
+ * @return {Object}
+ * @api private
+ */
+
+function strict(query) {
+  return foldl(function(acc, val, key) {
+    if (has.call(allowedKeys, key)) acc[key] = val;
+    return acc;
+  }, {}, utm(query));
+}
+
+/*
+ * Exports.
+ */
+
+module.exports = utm;
+module.exports.strict = strict;
+
+},{"@ndhoule/foldl":12,"component-querystring":86}],76:[function(require,module,exports){
 'use strict';
 
 /**
@@ -7848,7 +8456,7 @@ module.exports = foldl(function transform(ret, pairs, method) {
   return ret;
 }, {}, eventMap);
 
-},{"@ndhoule/foldl":11,"@ndhoule/map":14}],56:[function(require,module,exports){
+},{"@ndhoule/foldl":12,"@ndhoule/map":15}],77:[function(require,module,exports){
 'use strict';
 
 var bind = require('component-bind');
@@ -7866,7 +8474,7 @@ function bindAll(obj) {
 
 module.exports = bindAll;
 
-},{"component-bind":57}],57:[function(require,module,exports){
+},{"component-bind":78}],78:[function(require,module,exports){
 /**
  * Slice reference.
  */
@@ -7891,7 +8499,66 @@ module.exports = function(obj, fn){
   }
 };
 
-},{}],58:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
+/**
+ * Module dependencies.
+ */
+
+var type;
+try {
+  type = require('component-type');
+} catch (_) {
+  type = require('type');
+}
+
+/**
+ * Module exports.
+ */
+
+module.exports = clone;
+
+/**
+ * Clones objects.
+ *
+ * @param {Mixed} any object
+ * @api public
+ */
+
+function clone(obj){
+  switch (type(obj)) {
+    case 'object':
+      var copy = {};
+      for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+          copy[key] = clone(obj[key]);
+        }
+      }
+      return copy;
+
+    case 'array':
+      var copy = new Array(obj.length);
+      for (var i = 0, l = obj.length; i < l; i++) {
+        copy[i] = clone(obj[i]);
+      }
+      return copy;
+
+    case 'regexp':
+      // from millermedeiros/amd-utils - MIT
+      var flags = '';
+      flags += obj.multiline ? 'm' : '';
+      flags += obj.global ? 'g' : '';
+      flags += obj.ignoreCase ? 'i' : '';
+      return new RegExp(obj.source, flags);
+
+    case 'date':
+      return new Date(obj.getTime());
+
+    default: // string, number, boolean, …
+      return obj;
+  }
+}
+
+},{"component-type":88,"type":88}],80:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -8024,7 +8691,7 @@ function decode(value) {
   }
 }
 
-},{"debug":69}],59:[function(require,module,exports){
+},{"debug":90}],81:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -8115,7 +8782,7 @@ function array(obj, fn, ctx) {
   }
 }
 
-},{"component-type":60,"to-function":103,"type":60}],60:[function(require,module,exports){
+},{"component-type":82,"to-function":123,"type":82}],82:[function(require,module,exports){
 
 /**
  * toString ref.
@@ -8149,7 +8816,7 @@ module.exports = function(val){
   return typeof val;
 };
 
-},{}],61:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -8326,7 +8993,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],62:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 var bind = window.addEventListener ? 'addEventListener' : 'attachEvent',
     unbind = window.removeEventListener ? 'removeEventListener' : 'detachEvent',
     prefix = bind !== 'addEventListener' ? 'on' : '';
@@ -8362,7 +9029,7 @@ exports.unbind = function(el, type, fn, capture){
   el[unbind](prefix + type, fn, capture || false);
   return fn;
 };
-},{}],63:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 /**
  * Global Names
  */
@@ -8449,7 +9116,7 @@ function prefixed(str) {
   };
 }
 
-},{}],64:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -8462,7 +9129,7 @@ var pattern = /(\w+)\[(\d+)\]/
 
 /**
  * Safely encode the given string
- *
+ * 
  * @param {String} str
  * @return {String}
  * @api private
@@ -8478,7 +9145,7 @@ var encode = function(str) {
 
 /**
  * Safely decode the string
- *
+ * 
  * @param {String} str
  * @return {String}
  * @api private
@@ -8556,7 +9223,7 @@ exports.stringify = function(obj){
   return pairs.join('&');
 };
 
-},{"trim":106,"type":65}],65:[function(require,module,exports){
+},{"trim":125,"type":87}],87:[function(require,module,exports){
 /**
  * toString ref.
  */
@@ -8592,7 +9259,7 @@ module.exports = function(val){
   return typeof val;
 };
 
-},{}],66:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 /**
  * toString ref.
  */
@@ -8640,7 +9307,7 @@ function isBuffer(obj) {
     ))
 }
 
-},{}],67:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 
 /**
  * Parse the given `url`.
@@ -8724,235 +9391,7 @@ function port (protocol){
   }
 }
 
-},{}],68:[function(require,module,exports){
-/*
- * Date Format 1.2.3
- * (c) 2007-2009 Steven Levithan <stevenlevithan.com>
- * MIT license
- *
- * Includes enhancements by Scott Trenda <scott.trenda.net>
- * and Kris Kowal <cixar.com/~kris.kowal/>
- *
- * Accepts a date, a mask, or a date and a mask.
- * Returns a formatted version of the given date.
- * The date defaults to the current date/time.
- * The mask defaults to dateFormat.masks.default.
- */
-
-(function(global) {
-  'use strict';
-
-  var dateFormat = (function() {
-      var token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZWN]|'[^']*'|'[^']*'/g;
-      var timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g;
-      var timezoneClip = /[^-+\dA-Z]/g;
-
-      // Regexes and supporting functions are cached through closure
-      return function (date, mask, utc, gmt) {
-
-        // You can't provide utc if you skip other args (use the 'UTC:' mask prefix)
-        if (arguments.length === 1 && kindOf(date) === 'string' && !/\d/.test(date)) {
-          mask = date;
-          date = undefined;
-        }
-
-        date = date || new Date;
-
-        if(!(date instanceof Date)) {
-          date = new Date(date);
-        }
-
-        if (isNaN(date)) {
-          throw TypeError('Invalid date');
-        }
-
-        mask = String(dateFormat.masks[mask] || mask || dateFormat.masks['default']);
-
-        // Allow setting the utc/gmt argument via the mask
-        var maskSlice = mask.slice(0, 4);
-        if (maskSlice === 'UTC:' || maskSlice === 'GMT:') {
-          mask = mask.slice(4);
-          utc = true;
-          if (maskSlice === 'GMT:') {
-            gmt = true;
-          }
-        }
-
-        var _ = utc ? 'getUTC' : 'get';
-        var d = date[_ + 'Date']();
-        var D = date[_ + 'Day']();
-        var m = date[_ + 'Month']();
-        var y = date[_ + 'FullYear']();
-        var H = date[_ + 'Hours']();
-        var M = date[_ + 'Minutes']();
-        var s = date[_ + 'Seconds']();
-        var L = date[_ + 'Milliseconds']();
-        var o = utc ? 0 : date.getTimezoneOffset();
-        var W = getWeek(date);
-        var N = getDayOfWeek(date);
-        var flags = {
-          d:    d,
-          dd:   pad(d),
-          ddd:  dateFormat.i18n.dayNames[D],
-          dddd: dateFormat.i18n.dayNames[D + 7],
-          m:    m + 1,
-          mm:   pad(m + 1),
-          mmm:  dateFormat.i18n.monthNames[m],
-          mmmm: dateFormat.i18n.monthNames[m + 12],
-          yy:   String(y).slice(2),
-          yyyy: y,
-          h:    H % 12 || 12,
-          hh:   pad(H % 12 || 12),
-          H:    H,
-          HH:   pad(H),
-          M:    M,
-          MM:   pad(M),
-          s:    s,
-          ss:   pad(s),
-          l:    pad(L, 3),
-          L:    pad(Math.round(L / 10)),
-          t:    H < 12 ? 'a'  : 'p',
-          tt:   H < 12 ? 'am' : 'pm',
-          T:    H < 12 ? 'A'  : 'P',
-          TT:   H < 12 ? 'AM' : 'PM',
-          Z:    gmt ? 'GMT' : utc ? 'UTC' : (String(date).match(timezone) || ['']).pop().replace(timezoneClip, ''),
-          o:    (o > 0 ? '-' : '+') + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
-          S:    ['th', 'st', 'nd', 'rd'][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10],
-          W:    W,
-          N:    N
-        };
-
-        return mask.replace(token, function (match) {
-          if (match in flags) {
-            return flags[match];
-          }
-          return match.slice(1, match.length - 1);
-        });
-      };
-    })();
-
-  dateFormat.masks = {
-    'default':               'ddd mmm dd yyyy HH:MM:ss',
-    'shortDate':             'm/d/yy',
-    'mediumDate':            'mmm d, yyyy',
-    'longDate':              'mmmm d, yyyy',
-    'fullDate':              'dddd, mmmm d, yyyy',
-    'shortTime':             'h:MM TT',
-    'mediumTime':            'h:MM:ss TT',
-    'longTime':              'h:MM:ss TT Z',
-    'isoDate':               'yyyy-mm-dd',
-    'isoTime':               'HH:MM:ss',
-    'isoDateTime':           'yyyy-mm-dd\'T\'HH:MM:sso',
-    'isoUtcDateTime':        'UTC:yyyy-mm-dd\'T\'HH:MM:ss\'Z\'',
-    'expiresHeaderFormat':   'ddd, dd mmm yyyy HH:MM:ss Z'
-  };
-
-  // Internationalization strings
-  dateFormat.i18n = {
-    dayNames: [
-      'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
-      'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-    ],
-    monthNames: [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
-    ]
-  };
-
-function pad(val, len) {
-  val = String(val);
-  len = len || 2;
-  while (val.length < len) {
-    val = '0' + val;
-  }
-  return val;
-}
-
-/**
- * Get the ISO 8601 week number
- * Based on comments from
- * http://techblog.procurios.nl/k/n618/news/view/33796/14863/Calculate-ISO-8601-week-and-year-in-javascript.html
- *
- * @param  {Object} `date`
- * @return {Number}
- */
-function getWeek(date) {
-  // Remove time components of date
-  var targetThursday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-  // Change date to Thursday same week
-  targetThursday.setDate(targetThursday.getDate() - ((targetThursday.getDay() + 6) % 7) + 3);
-
-  // Take January 4th as it is always in week 1 (see ISO 8601)
-  var firstThursday = new Date(targetThursday.getFullYear(), 0, 4);
-
-  // Change date to Thursday same week
-  firstThursday.setDate(firstThursday.getDate() - ((firstThursday.getDay() + 6) % 7) + 3);
-
-  // Check if daylight-saving-time-switch occured and correct for it
-  var ds = targetThursday.getTimezoneOffset() - firstThursday.getTimezoneOffset();
-  targetThursday.setHours(targetThursday.getHours() - ds);
-
-  // Number of weeks between target Thursday and first Thursday
-  var weekDiff = (targetThursday - firstThursday) / (86400000*7);
-  return 1 + Math.floor(weekDiff);
-}
-
-/**
- * Get ISO-8601 numeric representation of the day of the week
- * 1 (for Monday) through 7 (for Sunday)
- *
- * @param  {Object} `date`
- * @return {Number}
- */
-function getDayOfWeek(date) {
-  var dow = date.getDay();
-  if(dow === 0) {
-    dow = 7;
-  }
-  return dow;
-}
-
-/**
- * kind-of shortcut
- * @param  {*} val
- * @return {String}
- */
-function kindOf(val) {
-  if (val === null) {
-    return 'null';
-  }
-
-  if (val === undefined) {
-    return 'undefined';
-  }
-
-  if (typeof val !== 'object') {
-    return typeof val;
-  }
-
-  if (Array.isArray(val)) {
-    return 'array';
-  }
-
-  return {}.toString.call(val)
-    .slice(8, -1).toLowerCase();
-};
-
-
-
-  if (typeof define === 'function' && define.amd) {
-    define(function () {
-      return dateFormat;
-    });
-  } else if (typeof exports === 'object') {
-    module.exports = dateFormat;
-  } else {
-    global.dateFormat = dateFormat;
-  }
-})(this);
-
-},{}],69:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 (function (process){
 /**
  * This is the web browser implementation of `debug()`.
@@ -9141,7 +9580,7 @@ function localstorage() {
 }
 
 }).call(this,require('_process'))
-},{"./debug":70,"_process":87}],70:[function(require,module,exports){
+},{"./debug":91,"_process":108}],91:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -9345,7 +9784,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":80}],71:[function(require,module,exports){
+},{"ms":102}],92:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -9379,7 +9818,7 @@ function when(condition, fn, interval) {
 
 module.exports = when;
 
-},{"next-tick":84}],72:[function(require,module,exports){
+},{"next-tick":106}],93:[function(require,module,exports){
 
 /**
  * Expose `parse`.
@@ -9493,7 +9932,7 @@ function parse(html, doc) {
   return fragment;
 }
 
-},{}],73:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 'use strict';
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -9612,44 +10051,26 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],74:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 
 /**
- * Module dependencies.
- */
-
-var debug = require('debug');
-
-/**
- * Expose `generate`.
- */
-
-module.exports = generate;
-
-/**
- * Generate a global queue pushing method with `name`.
+ * Module exports.
  *
- * @param {String} name
- * @param {Object} options
- *   @property {Boolean} wrap
- * @return {Function}
+ * Logic borrowed from Modernizr:
+ *
+ *   - https://github.com/Modernizr/Modernizr/blob/master/feature-detects/cors.js
  */
 
-function generate (name, options) {
-  var log = debug('global-queue:' + name);
-  options = options || {};
-
-  return function (args) {
-    args = [].slice.call(arguments);
-    window[name] || (window[name] = []);
-    log('%o', args);
-    options.wrap === false
-      ? window[name].push.apply(window[name], args)
-      : window[name].push(args);
-  };
+try {
+  module.exports = typeof XMLHttpRequest !== 'undefined' &&
+    'withCredentials' in new XMLHttpRequest();
+} catch (err) {
+  // if XMLHttp support is disabled in IE then it will throw
+  // when trying to create
+  module.exports = false;
 }
 
-},{"debug":69}],75:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -9674,12 +10095,12 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],76:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 
 module.exports = function isEmail (string) {
     return (/.+\@.+\..+/).test(string);
 };
-},{}],77:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 /* globals window, HTMLElement */
 
 'use strict';
@@ -10481,7 +10902,7 @@ is.symbol = function (value) {
 
 module.exports = is;
 
-},{}],78:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 (function (global){
 /*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 ;(function () {
@@ -11387,7 +11808,106 @@ module.exports = is;
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],79:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
+/**
+ * Module dependencies
+ */
+
+var debug = require('debug')('jsonp');
+
+/**
+ * Module exports.
+ */
+
+module.exports = jsonp;
+
+/**
+ * Callback index.
+ */
+
+var count = 0;
+
+/**
+ * Noop function.
+ */
+
+function noop(){}
+
+/**
+ * JSONP handler
+ *
+ * Options:
+ *  - param {String} qs parameter (`callback`)
+ *  - prefix {String} qs parameter (`__jp`)
+ *  - name {String} qs parameter (`prefix` + incr)
+ *  - timeout {Number} how long after a timeout error is emitted (`60000`)
+ *
+ * @param {String} url
+ * @param {Object|Function} optional options / callback
+ * @param {Function} optional callback
+ */
+
+function jsonp(url, opts, fn){
+  if ('function' == typeof opts) {
+    fn = opts;
+    opts = {};
+  }
+  if (!opts) opts = {};
+
+  var prefix = opts.prefix || '__jp';
+
+  // use the callback name that was passed if one was provided.
+  // otherwise generate a unique name by incrementing our counter.
+  var id = opts.name || (prefix + (count++));
+
+  var param = opts.param || 'callback';
+  var timeout = null != opts.timeout ? opts.timeout : 60000;
+  var enc = encodeURIComponent;
+  var target = document.getElementsByTagName('script')[0] || document.head;
+  var script;
+  var timer;
+
+
+  if (timeout) {
+    timer = setTimeout(function(){
+      cleanup();
+      if (fn) fn(new Error('Timeout'));
+    }, timeout);
+  }
+
+  function cleanup(){
+    if (script.parentNode) script.parentNode.removeChild(script);
+    window[id] = noop;
+    if (timer) clearTimeout(timer);
+  }
+
+  function cancel(){
+    if (window[id]) {
+      cleanup();
+    }
+  }
+
+  window[id] = function(data){
+    debug('jsonp got', data);
+    cleanup();
+    if (fn) fn(null, data);
+  };
+
+  // add qs component
+  url += (~url.indexOf('?') ? '&' : '?') + param + '=' + enc(id);
+  url = url.replace('?&', '?');
+
+  debug('jsonp req "%s"', url);
+
+  // create script
+  script = document.createElement('script');
+  script.src = url;
+  target.parentNode.insertBefore(script, target);
+
+  return cancel;
+}
+
+},{"debug":90}],101:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -11449,7 +11969,7 @@ module.exports = function loadIframe(options, fn){
   return iframe;
 };
 
-},{"is":77,"next-tick":84,"script-onload":89}],80:[function(require,module,exports){
+},{"is":98,"next-tick":106,"script-onload":110}],102:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -11603,7 +12123,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],81:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 'use strict';
 
 var is = require('is');
@@ -11648,7 +12168,7 @@ function toMs(num) {
   return num;
 }
 
-},{"./milliseconds":82,"./seconds":83,"@segment/isodate":50,"is":77}],82:[function(require,module,exports){
+},{"./milliseconds":104,"./seconds":105,"@segment/isodate":63,"is":98}],104:[function(require,module,exports){
 'use strict';
 
 /**
@@ -11680,7 +12200,7 @@ exports.parse = function(millis) {
   return new Date(millis);
 };
 
-},{}],83:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 'use strict';
 
 /**
@@ -11712,7 +12232,7 @@ exports.parse = function(seconds) {
   return new Date(millis);
 };
 
-},{}],84:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -11780,7 +12300,7 @@ module.exports = (function () {
 }());
 
 }).call(this,require('_process'))
-},{"_process":87}],85:[function(require,module,exports){
+},{"_process":108}],107:[function(require,module,exports){
 
 var identity = function(_){ return _; };
 
@@ -11934,92 +12454,7 @@ function isFunction(val) {
   return typeof val === 'function';
 }
 
-},{}],86:[function(require,module,exports){
-
-/**
- * HOP ref.
- */
-
-var has = Object.prototype.hasOwnProperty;
-
-/**
- * Return own keys in `obj`.
- *
- * @param {Object} obj
- * @return {Array}
- * @api public
- */
-
-exports.keys = Object.keys || function(obj){
-  var keys = [];
-  for (var key in obj) {
-    if (has.call(obj, key)) {
-      keys.push(key);
-    }
-  }
-  return keys;
-};
-
-/**
- * Return own values in `obj`.
- *
- * @param {Object} obj
- * @return {Array}
- * @api public
- */
-
-exports.values = function(obj){
-  var vals = [];
-  for (var key in obj) {
-    if (has.call(obj, key)) {
-      vals.push(obj[key]);
-    }
-  }
-  return vals;
-};
-
-/**
- * Merge `b` into `a`.
- *
- * @param {Object} a
- * @param {Object} b
- * @return {Object} a
- * @api public
- */
-
-exports.merge = function(a, b){
-  for (var key in b) {
-    if (has.call(b, key)) {
-      a[key] = b[key];
-    }
-  }
-  return a;
-};
-
-/**
- * Return length of `obj`.
- *
- * @param {Object} obj
- * @return {Number}
- * @api public
- */
-
-exports.length = function(obj){
-  return exports.keys(obj).length;
-};
-
-/**
- * Check if `obj` is empty.
- *
- * @param {Object} obj
- * @return {Boolean}
- * @api public
- */
-
-exports.isEmpty = function(obj){
-  return 0 == exports.length(obj);
-};
-},{}],87:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -12205,7 +12640,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],88:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -12308,7 +12743,7 @@ function compact(value){
   return null == value;
 }
 
-},{"type-component":107}],89:[function(require,module,exports){
+},{"type-component":126}],110:[function(require,module,exports){
 
 // https://github.com/thirdpartyjs/thirdpartyjs-code/blob/master/examples/templates/02/loading-files/index.html
 
@@ -12363,7 +12798,7 @@ function attach(el, fn){
   });
 }
 
-},{}],90:[function(require,module,exports){
+},{}],111:[function(require,module,exports){
 'use strict';
 
 /**
@@ -12402,7 +12837,7 @@ module.exports = function(proto) {
   }
 };
 
-},{"obj-case":85}],91:[function(require,module,exports){
+},{"obj-case":107}],112:[function(require,module,exports){
 'use strict';
 
 /**
@@ -12473,7 +12908,7 @@ Alias.prototype.to = Alias.prototype.userId;
 
 module.exports = Alias;
 
-},{"./facade":92,"./utils":100}],92:[function(require,module,exports){
+},{"./facade":113,"./utils":121}],113:[function(require,module,exports){
 'use strict';
 
 var address = require('./address');
@@ -12787,7 +13222,7 @@ function transform(obj) {
 
 module.exports = Facade;
 
-},{"./address":90,"./is-enabled":96,"./utils":100,"@segment/isodate-traverse":49,"new-date":81,"obj-case":85}],93:[function(require,module,exports){
+},{"./address":111,"./is-enabled":117,"./utils":121,"@segment/isodate-traverse":62,"new-date":103,"obj-case":107}],114:[function(require,module,exports){
 'use strict';
 
 /**
@@ -12908,7 +13343,7 @@ Group.prototype.properties = function() {
 
 module.exports = Group;
 
-},{"./facade":92,"./utils":100,"is-email":76,"new-date":81}],94:[function(require,module,exports){
+},{"./facade":113,"./utils":121,"is-email":97,"new-date":103}],115:[function(require,module,exports){
 'use strict';
 
 var Facade = require('./facade');
@@ -13153,7 +13588,7 @@ Identify.prototype.birthday = Facade.proxy('traits.birthday');
 
 module.exports = Identify;
 
-},{"./facade":92,"./utils":100,"is-email":76,"new-date":81,"obj-case":85,"trim":106}],95:[function(require,module,exports){
+},{"./facade":113,"./utils":121,"is-email":97,"new-date":103,"obj-case":107,"trim":125}],116:[function(require,module,exports){
 'use strict';
 
 var Facade = require('./facade');
@@ -13175,7 +13610,7 @@ Facade.Screen = require('./screen');
 
 module.exports = Facade;
 
-},{"./alias":91,"./facade":92,"./group":93,"./identify":94,"./page":97,"./screen":98,"./track":99}],96:[function(require,module,exports){
+},{"./alias":112,"./facade":113,"./group":114,"./identify":115,"./page":118,"./screen":119,"./track":120}],117:[function(require,module,exports){
 'use strict';
 
 /**
@@ -13198,7 +13633,7 @@ module.exports = function(integration) {
   return !disabled[integration];
 };
 
-},{}],97:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 'use strict';
 
 var inherit = require('./utils').inherit;
@@ -13347,7 +13782,7 @@ Page.prototype.track = function(name) {
 
 module.exports = Page;
 
-},{"./facade":92,"./track":99,"./utils":100,"is-email":76}],98:[function(require,module,exports){
+},{"./facade":113,"./track":120,"./utils":121,"is-email":97}],119:[function(require,module,exports){
 'use strict';
 
 var inherit = require('./utils').inherit;
@@ -13419,7 +13854,7 @@ Screen.prototype.track = function(name) {
 
 module.exports = Screen;
 
-},{"./page":97,"./track":99,"./utils":100}],99:[function(require,module,exports){
+},{"./page":118,"./track":120,"./utils":121}],120:[function(require,module,exports){
 'use strict';
 
 var inherit = require('./utils').inherit;
@@ -13746,14 +14181,14 @@ function currency(val) {
 
 module.exports = Track;
 
-},{"./facade":92,"./identify":94,"./utils":100,"is-email":76,"obj-case":85}],100:[function(require,module,exports){
+},{"./facade":113,"./identify":115,"./utils":121,"is-email":97,"obj-case":107}],121:[function(require,module,exports){
 'use strict';
 
 exports.inherit = require('inherits');
 exports.clone = require('@ndhoule/clone');
 exports.type = require('type-component');
 
-},{"@ndhoule/clone":5,"inherits":75,"type-component":107}],101:[function(require,module,exports){
+},{"@ndhoule/clone":6,"inherits":96,"type-component":126}],122:[function(require,module,exports){
 
 /**
  * Generate a slug from the given `str`.
@@ -13778,30 +14213,7 @@ module.exports = function (str, options) {
     .replace(/ +/g, options.separator || '-')
 };
 
-},{}],102:[function(require,module,exports){
-
-var space = require('to-space-case')
-
-/**
- * Export.
- */
-
-module.exports = toCamelCase
-
-/**
- * Convert a `string` to camel case.
- *
- * @param {String} string
- * @return {String}
- */
-
-function toCamelCase(string) {
-  return space(string).replace(/\s(\w)/g, function (matches, letter) {
-    return letter.toUpperCase()
-  })
-}
-
-},{"to-space-case":105}],103:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 
 /**
  * Module Dependencies
@@ -13955,99 +14367,9 @@ function stripNested (prop, str, val) {
   });
 }
 
-},{"component-props":63,"props":63}],104:[function(require,module,exports){
-
-/**
- * Export.
- */
-
-module.exports = toNoCase
-
-/**
- * Test whether a string is camel-case.
- */
-
-var hasSpace = /\s/
-var hasSeparator = /(_|-|\.|:)/
-var hasCamel = /([a-z][A-Z]|[A-Z][a-z])/
-
-/**
- * Remove any starting case from a `string`, like camel or snake, but keep
- * spaces and punctuation that may be important otherwise.
- *
- * @param {String} string
- * @return {String}
- */
-
-function toNoCase(string) {
-  if (hasSpace.test(string)) return string.toLowerCase()
-  if (hasSeparator.test(string)) return (unseparate(string) || string).toLowerCase()
-  if (hasCamel.test(string)) return uncamelize(string).toLowerCase()
-  return string.toLowerCase()
-}
-
-/**
- * Separator splitter.
- */
-
-var separatorSplitter = /[\W_]+(.|$)/g
-
-/**
- * Un-separate a `string`.
- *
- * @param {String} string
- * @return {String}
- */
-
-function unseparate(string) {
-  return string.replace(separatorSplitter, function (m, next) {
-    return next ? ' ' + next : ''
-  })
-}
-
-/**
- * Camelcase splitter.
- */
-
-var camelSplitter = /(.)([A-Z]+)/g
-
-/**
- * Un-camelcase a `string`.
- *
- * @param {String} string
- * @return {String}
- */
-
-function uncamelize(string) {
-  return string.replace(camelSplitter, function (m, previous, uppers) {
-    return previous + ' ' + uppers.toLowerCase().split('').join(' ')
-  })
-}
-
-},{}],105:[function(require,module,exports){
-
-var clean = require('to-no-case')
-
-/**
- * Export.
- */
-
-module.exports = toSpaceCase
-
-/**
- * Convert a `string` to space case.
- *
- * @param {String} string
- * @return {String}
- */
-
-function toSpaceCase(string) {
-  return clean(string).replace(/[\W_]+(.|$)/g, function (matches, match) {
-    return match ? ' ' + match : ''
-  }).trim()
-}
-
-},{"to-no-case":104}],106:[function(require,module,exports){
+},{"component-props":85,"props":85}],124:[function(require,module,exports){
+arguments[4][40][0].apply(exports,arguments)
+},{"dup":40}],125:[function(require,module,exports){
 
 exports = module.exports = trim;
 
@@ -14063,7 +14385,7 @@ exports.right = function(str){
   return str.replace(/\s*$/, '');
 };
 
-},{}],107:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
 
 /**
  * toString ref.
@@ -14095,45 +14417,151 @@ module.exports = function(val){
   return typeof val;
 };
 
-},{}],108:[function(require,module,exports){
+},{}],127:[function(require,module,exports){
+module.exports = encode;
+
+function encode(string) {
+    string = string.replace(/\r\n/g, "\n");
+    var utftext = "";
+
+    for (var n = 0; n < string.length; n++) {
+
+        var c = string.charCodeAt(n);
+
+        if (c < 128) {
+            utftext += String.fromCharCode(c);
+        }
+        else if ((c > 127) && (c < 2048)) {
+            utftext += String.fromCharCode((c >> 6) | 192);
+            utftext += String.fromCharCode((c & 63) | 128);
+        }
+        else {
+            utftext += String.fromCharCode((c >> 12) | 224);
+            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+            utftext += String.fromCharCode((c & 63) | 128);
+        }
+
+    }
+
+    return utftext;
+}
+},{}],128:[function(require,module,exports){
+arguments[4][32][0].apply(exports,arguments)
+},{"dup":32}],129:[function(require,module,exports){
+arguments[4][33][0].apply(exports,arguments)
+},{"./rng":128,"dup":33}],130:[function(require,module,exports){
 
 /**
- * Protocol.
+ * dependencies.
  */
 
-module.exports = function (url) {
-  switch (arguments.length) {
-    case 0: return check();
-    case 1: return transform(url);
+var unserialize = require('unserialize');
+var each = require('each');
+var storage;
+
+/**
+ * Safari throws when a user
+ * blocks access to cookies / localstorage.
+ */
+
+try {
+  storage = window.localStorage;
+} catch (e) {
+  storage = null;
+}
+
+/**
+ * Expose `store`
+ */
+
+module.exports = store;
+
+/**
+ * Store the given `key`, `val`.
+ *
+ * @param {String|Object} key
+ * @param {Mixed} value
+ * @return {Mixed}
+ * @api public
+ */
+
+function store(key, value){
+  var length = arguments.length;
+  if (0 == length) return all();
+  if (2 <= length) return set(key, value);
+  if (1 != length) return;
+  if (null == key) return storage.clear();
+  if ('string' == typeof key) return get(key);
+  if ('object' == typeof key) return each(key, set);
+}
+
+/**
+ * supported flag.
+ */
+
+store.supported = !! storage;
+
+/**
+ * Set `key` to `val`.
+ *
+ * @param {String} key
+ * @param {Mixed} val
+ */
+
+function set(key, val){
+  return null == val
+    ? storage.removeItem(key)
+    : storage.setItem(key, JSON.stringify(val));
+}
+
+/**
+ * Get `key`.
+ *
+ * @param {String} key
+ * @return {Mixed}
+ */
+
+function get(key){
+  return unserialize(storage.getItem(key));
+}
+
+/**
+ * Get all.
+ *
+ * @return {Object}
+ */
+
+function all(){
+  var len = storage.length;
+  var ret = {};
+  var key;
+
+  while (0 <= --len) {
+    key = storage.key(len);
+    ret[key] = get(key);
+  }
+
+  return ret;
+}
+
+},{"each":81,"unserialize":131}],131:[function(require,module,exports){
+
+/**
+ * Unserialize the given "stringified" javascript.
+ * 
+ * @param {String} val
+ * @return {Mixed}
+ */
+
+module.exports = function(val){
+  try {
+    return JSON.parse(val);
+  } catch (e) {
+    return val || undefined;
   }
 };
 
-
-/**
- * Transform a protocol-relative `url` to the use the proper protocol.
- *
- * @param {String} url
- * @return {String}
- */
-
-function transform (url) {
-  return check() ? 'https:' + url : 'http:' + url;
-}
-
-
-/**
- * Check whether `https:` be used for loading scripts.
- *
- * @return {Boolean}
- */
-
-function check () {
-  return (
-    location.protocol == 'https:' ||
-    location.protocol == 'chrome-extension:'
-  );
-}
-},{}],109:[function(require,module,exports){
+},{}],132:[function(require,module,exports){
 module.exports={
   "name": "@segment/analytics.js",
   "author": "Segment <friends@segment.com>",
@@ -14163,98 +14591,10 @@ module.exports={
   "dependencies": {
     "@segment/analytics.js-core": "^3.0.0",
     "@segment/analytics.js-integration": "^3.1.0",
-    "@segment/analytics.js-integration-adroll": "git+https://github.com/segment-integrations/analytics.js-integration-adroll.git",
-    "@segment/analytics.js-integration-adwords": "git+https://github.com/segment-integrations/analytics.js-integration-adwords.git",
-    "@segment/analytics.js-integration-alexa": "git+https://github.com/segment-integrations/analytics.js-integration-alexa.git",
     "@segment/analytics.js-integration-amplitude": "git+https://github.com/segment-integrations/analytics.js-integration-amplitude.git",
-    "@segment/analytics.js-integration-appcues": "git+https://github.com/segment-integrations/analytics.js-integration-appcues.git",
-    "@segment/analytics.js-integration-atatus": "git+https://github.com/segment-integrations/analytics.js-integration-atatus.git",
-    "@segment/analytics.js-integration-autosend": "git+https://github.com/segment-integrations/analytics.js-integration-autosend.git",
-    "@segment/analytics.js-integration-awesm": "git+https://github.com/segment-integrations/analytics.js-integration-awesm.git",
-    "@segment/analytics.js-integration-bing-ads": "git+https://github.com/segment-integrations/analytics.js-integration-bing-ads.git",
-    "@segment/analytics.js-integration-blueshift": "git+https://github.com/segment-integrations/analytics.js-integration-blueshift.git",
-    "@segment/analytics.js-integration-boomtrain": "git+https://github.com/segment-integrations/analytics.js-integration-boomtrain.git",
-    "@segment/analytics.js-integration-bronto": "git+https://github.com/segment-integrations/analytics.js-integration-bronto.git",
-    "@segment/analytics.js-integration-bugherd": "git+https://github.com/segment-integrations/analytics.js-integration-bugherd.git",
-    "@segment/analytics.js-integration-bugsnag": "git+https://github.com/segment-integrations/analytics.js-integration-bugsnag.git",
-    "@segment/analytics.js-integration-chameleon": "git+https://github.com/segment-integrations/analytics.js-integration-chameleon.git",
-    "@segment/analytics.js-integration-chartbeat": "git+https://github.com/segment-integrations/analytics.js-integration-chartbeat.git",
-    "@segment/analytics.js-integration-clicky": "git+https://github.com/segment-integrations/analytics.js-integration-clicky.git",
-    "@segment/analytics.js-integration-comscore": "git+https://github.com/segment-integrations/analytics.js-integration-comscore.git",
-    "@segment/analytics.js-integration-crazy-egg": "git+https://github.com/segment-integrations/analytics.js-integration-crazy-egg.git",
-    "@segment/analytics.js-integration-curebit": "git+https://github.com/segment-integrations/analytics.js-integration-curebit.git",
-    "@segment/analytics.js-integration-customerio": "git+https://github.com/segment-integrations/analytics.js-integration-customerio.git",
-    "@segment/analytics.js-integration-drift": "git+https://github.com/segment-integrations/analytics.js-integration-drift.git",
-    "@segment/analytics.js-integration-drip": "git+https://github.com/segment-integrations/analytics.js-integration-drip.git",
-    "@segment/analytics.js-integration-elevio": "git+https://github.com/segment-integrations/analytics.js-integration-elevio.git",
-    "@segment/analytics.js-integration-errorception": "git+https://github.com/segment-integrations/analytics.js-integration-errorception.git",
-    "@segment/analytics.js-integration-evergage": "git+https://github.com/segment-integrations/analytics.js-integration-evergage.git",
-    "@segment/analytics.js-integration-extole": "git+https://github.com/segment-integrations/analytics.js-integration-extole.git",
-    "@segment/analytics.js-integration-facebook-conversion-tracking": "git+https://github.com/segment-integrations/analytics.js-integration-facebook-conversion-tracking.git",
-    "@segment/analytics.js-integration-facebook-custom-audiences": "git+https://github.com/segment-integrations/analytics.js-integration-facebook-custom-audiences.git",
-    "@segment/analytics.js-integration-facebook-pixel": "git+https://github.com/segment-integrations/analytics.js-integration-facebook-pixel.git",
-    "@segment/analytics.js-integration-foxmetrics": "git+https://github.com/segment-integrations/analytics.js-integration-foxmetrics.git",
-    "@segment/analytics.js-integration-frontleaf": "git+https://github.com/segment-integrations/analytics.js-integration-frontleaf.git",
-    "@segment/analytics.js-integration-gauges": "git+https://github.com/segment-integrations/analytics.js-integration-gauges.git",
-    "@segment/analytics.js-integration-get-satisfaction": "git+https://github.com/segment-integrations/analytics.js-integration-get-satisfaction.git",
-    "@segment/analytics.js-integration-google-analytics": "git+https://github.com/segment-integrations/analytics.js-integration-google-analytics.git",
-    "@segment/analytics.js-integration-google-tag-manager": "git+https://github.com/segment-integrations/analytics.js-integration-google-tag-manager.git",
-    "@segment/analytics.js-integration-gosquared": "git+https://github.com/segment-integrations/analytics.js-integration-gosquared.git",
-    "@segment/analytics.js-integration-heap": "git+https://github.com/segment-integrations/analytics.js-integration-heap.git",
-    "@segment/analytics.js-integration-hellobar": "git+https://github.com/segment-integrations/analytics.js-integration-hellobar.git",
-    "@segment/analytics.js-integration-hittail": "git+https://github.com/segment-integrations/analytics.js-integration-hittail.git",
-    "@segment/analytics.js-integration-hubspot": "git+https://github.com/segment-integrations/analytics.js-integration-hubspot.git",
-    "@segment/analytics.js-integration-improvely": "git+https://github.com/segment-integrations/analytics.js-integration-improvely.git",
-    "@segment/analytics.js-integration-inspectlet": "git+https://github.com/segment-integrations/analytics.js-integration-inspectlet.git",
-    "@segment/analytics.js-integration-intercom": "git+https://github.com/segment-integrations/analytics.js-integration-intercom.git",
-    "@segment/analytics.js-integration-keen-io": "git+https://github.com/segment-integrations/analytics.js-integration-keen-io.git",
-    "@segment/analytics.js-integration-kenshoo": "git+https://github.com/segment-integrations/analytics.js-integration-kenshoo.git",
-    "@segment/analytics.js-integration-kissmetrics": "git+https://github.com/segment-integrations/analytics.js-integration-kissmetrics.git",
-    "@segment/analytics.js-integration-klaviyo": "git+https://github.com/segment-integrations/analytics.js-integration-klaviyo.git",
-    "@segment/analytics.js-integration-livechat": "git+https://github.com/segment-integrations/analytics.js-integration-livechat.git",
-    "@segment/analytics.js-integration-lucky-orange": "git+https://github.com/segment-integrations/analytics.js-integration-lucky-orange.git",
-    "@segment/analytics.js-integration-lytics": "git+https://github.com/segment-integrations/analytics.js-integration-lytics.git",
-    "@segment/analytics.js-integration-madkudu": "git+https://github.com/segment-integrations/analytics.js-integration-madkudu.git",
-    "@segment/analytics.js-integration-mixpanel": "git+https://github.com/segment-integrations/analytics.js-integration-mixpanel.git",
-    "@segment/analytics.js-integration-mojn": "git+https://github.com/segment-integrations/analytics.js-integration-mojn.git",
-    "@segment/analytics.js-integration-mouseflow": "git+https://github.com/segment-integrations/analytics.js-integration-mouseflow.git",
-    "@segment/analytics.js-integration-mousestats": "git+https://github.com/segment-integrations/analytics.js-integration-mousestats.git",
-    "@segment/analytics.js-integration-navilytics": "git+https://github.com/segment-integrations/analytics.js-integration-navilytics.git",
-    "@segment/analytics.js-integration-nudgespot": "git+https://github.com/segment-integrations/analytics.js-integration-nudgespot.git",
-    "@segment/analytics.js-integration-olark": "git+https://github.com/segment-integrations/analytics.js-integration-olark.git",
-    "@segment/analytics.js-integration-optimizely": "git+https://github.com/segment-integrations/analytics.js-integration-optimizely.git",
-    "@segment/analytics.js-integration-outbound": "git+https://github.com/segment-integrations/analytics.js-integration-outbound.git",
-    "@segment/analytics.js-integration-parsely": "git+https://github.com/segment-integrations/analytics.js-integration-parsely.git",
-    "@segment/analytics.js-integration-perfect-audience": "git+https://github.com/segment-integrations/analytics.js-integration-perfect-audience.git",
-    "@segment/analytics.js-integration-pingdom": "git+https://github.com/segment-integrations/analytics.js-integration-pingdom.git",
-    "@segment/analytics.js-integration-piwik": "git+https://github.com/segment-integrations/analytics.js-integration-piwik.git",
-    "@segment/analytics.js-integration-preact": "git+https://github.com/segment-integrations/analytics.js-integration-preact.git",
-    "@segment/analytics.js-integration-qualaroo": "git+https://github.com/segment-integrations/analytics.js-integration-qualaroo.git",
-    "@segment/analytics.js-integration-quantcast": "git+https://github.com/segment-integrations/analytics.js-integration-quantcast.git",
-    "@segment/analytics.js-integration-quanticmind": "git+https://github.com/segment-integrations/analytics.js-integration-quanticmind.git",
-    "@segment/analytics.js-integration-ramen": "git+https://github.com/segment-integrations/analytics.js-integration-ramen.git",
-    "@segment/analytics.js-integration-rollbar": "git+https://github.com/segment-integrations/analytics.js-integration-rollbar.git",
-    "@segment/analytics.js-integration-route": "git+https://github.com/segment-integrations/analytics.js-integration-route.git",
-    "@segment/analytics.js-integration-saasquatch": "git+https://github.com/segment-integrations/analytics.js-integration-saasquatch.git",
-    "@segment/analytics.js-integration-satismeter": "git+https://github.com/segment-integrations/analytics.js-integration-satismeter.git",
+    "@segment/analytics.js-integration-google-adwords-new": "git+https://github.com/segment-integrations/analytics.js-integration-google-adwords-new.git",
     "@segment/analytics.js-integration-segmentio": "git+https://github.com/segment-integrations/analytics.js-integration-segmentio.git",
-    "@segment/analytics.js-integration-sentry": "git+https://github.com/segment-integrations/analytics.js-integration-sentry.git",
-    "@segment/analytics.js-integration-simplereach": "git+https://github.com/segment-integrations/analytics.js-integration-simplereach.git",
-    "@segment/analytics.js-integration-snapengage": "git+https://github.com/segment-integrations/analytics.js-integration-snapengage.git",
-    "@segment/analytics.js-integration-spinnakr": "git+https://github.com/segment-integrations/analytics.js-integration-spinnakr.git",
-    "@segment/analytics.js-integration-supporthero": "git+https://github.com/segment-integrations/analytics.js-integration-supporthero.git",
-    "@segment/analytics.js-integration-taplytics": "git+https://github.com/segment-integrations/analytics.js-integration-taplytics.git",
-    "@segment/analytics.js-integration-tapstream": "git+https://github.com/segment-integrations/analytics.js-integration-tapstream.git",
-    "@segment/analytics.js-integration-trakio": "git+https://github.com/segment-integrations/analytics.js-integration-trakio.git",
-    "@segment/analytics.js-integration-twitter-ads": "git+https://github.com/segment-integrations/analytics.js-integration-twitter-ads.git",
-    "@segment/analytics.js-integration-userlike": "git+https://github.com/segment-integrations/analytics.js-integration-userlike.git",
-    "@segment/analytics.js-integration-uservoice": "git+https://github.com/segment-integrations/analytics.js-integration-uservoice.git",
-    "@segment/analytics.js-integration-vero": "git+https://github.com/segment-integrations/analytics.js-integration-vero.git",
-    "@segment/analytics.js-integration-visual-website-optimizer": "git+https://github.com/segment-integrations/analytics.js-integration-visual-website-optimizer.git",
-    "@segment/analytics.js-integration-webengage": "git+https://github.com/segment-integrations/analytics.js-integration-webengage.git",
-    "@segment/analytics.js-integration-woopra": "git+https://github.com/segment-integrations/analytics.js-integration-woopra.git",
-    "@segment/analytics.js-integration-wootric": "git+https://github.com/segment-integrations/analytics.js-integration-wootric.git",
-    "@segment/analytics.js-integration-yandex-metrica": "git+https://github.com/segment-integrations/analytics.js-integration-yandex-metrica.git"
+    "@segment/analytics.js-integration-customerio": "git+https://github.com/segment-integrations/analytics.js-integration-customerio.git"
   },
   "devDependencies": {
     "browserify": "^13.0.1",
